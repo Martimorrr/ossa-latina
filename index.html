@@ -278,52 +278,69 @@ let VOICES = [];
 const loadVoices = () => { try { VOICES = speechSynthesis.getVoices() || []; } catch (e) {} };
 if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
 const voiceFor = p => VOICES.find(v => v.lang.replace("_", "-").toLowerCase().indexOf(p) === 0);
-/* Звук. Все термины лежат в одном файле. Точнее всего отрезок вырезает
-   Web Audio, но декодирование занимает время, а на мобильных ожидание внутри
-   обработчика съедает пользовательский жест — и тогда не играет вообще ничего.
-   Поэтому звук всегда стартует синхронно: готов буфер — играем точно, не готов —
-   играем тем же файлом через <audio>, а декодирование идёт в фоне. */
+/* Звук. Основной путь — отдельный файл на термин: он играется целиком,
+   без перемотки и без декодирования, поэтому надёжен на телефонах. Спрайт
+   (один файл на весь словарь) остаётся запасным — им пользуется версия,
+   где отдельных файлов нет. Всё стартует синхронно, внутри жеста. */
 const AC = window.AudioContext || window.webkitAudioContext;
 const HAS_SPRITE = typeof SPRITE === "object" && SPRITE;
-let actx = null, sprBuf = null, sprRaw = null, node = null, decoding = null, player = null, el = null, stopAt = null;
+const CLIP_DIR = "audio/";
+let clips = null, clipEl = null, actx = null, sprBuf = null, sprRaw = null,
+    node = null, decoding = null, player = null, el = null, stopAt = null;
 
-if (HAS_SPRITE) {
+fetch(CLIP_DIR + "index.json").then(r => r.ok ? r.json() : null)
+  .then(list => { clips = Array.isArray(list) ? new Set(list) : false; if (!clips) primeSprite(); })
+  .catch(() => { clips = false; primeSprite(); });
+
+function primeSprite() {
+  if (!HAS_SPRITE || !AC) return;
   fetch("ossa.mp4").then(r => r.arrayBuffer()).then(b => { sprRaw = b; buffer(); }).catch(() => {});
-  addEventListener("pointerdown", () => buffer(), { once: true });
 }
 function ctx() {
   if (!actx && AC) { try { actx = new AC(); } catch (e) { return null; } }
   if (actx && actx.state === "suspended") actx.resume();
   return actx;
 }
-function buffer() {                                   // готовит буфер в фоне; вызывающий не ждёт
-  if (sprBuf || decoding || !HAS_SPRITE || !sprRaw) return;
+function buffer() {
+  if (sprBuf || decoding || !sprRaw) return;
   const c = ctx(); if (!c) return;
   decoding = new Promise((res, rej) => {
     let done = false;
-    const finish = b => { if (!done) { done = true; sprBuf = b; res(b); } };
-    const fail = e => { if (!done) { done = true; decoding = null; rej(e); } };
-    setTimeout(() => fail(new Error("decode timeout")), 12000);
-    let p;
-    try { p = c.decodeAudioData(sprRaw.slice(0), finish, fail); } catch (e) { return fail(e); }
-    if (p && p.then) p.then(finish, fail);            // Safari умеет только колбэки
+    const ok = b => { if (!done) { done = true; sprBuf = b; res(b); } };
+    const no = e => { if (!done) { done = true; decoding = null; rej(e); } };
+    setTimeout(() => no(new Error("decode timeout")), 12000);
+    let p; try { p = c.decodeAudioData(sprRaw.slice(0), ok, no); } catch (e) { return no(e); }
+    if (p && p.then) p.then(ok, no);                  // Safari умеет только колбэки
   }).catch(() => null);
 }
 function stopAll() {
   if (node) { try { node.stop(); } catch (e) {} node = null; }
   if (player) { player.pause(); player = null; }
+  if (clipEl) clipEl.pause();
   if (el) { clearTimeout(stopAt); el.pause(); }
   if (window.speechSynthesis) speechSynthesis.cancel();
 }
-function playExact(seg, rate) {                       // точная нарезка, когда буфер готов
-  const c = ctx(); if (!c) return false;
+function playClip(id, rate) {
+  if (!clips || !clips.has(id)) return false;
+  if (!clipEl) {
+    clipEl = new Audio();
+    clipEl.addEventListener("error", () => { clips = false; primeSprite(); });
+  }
+  clipEl.src = CLIP_DIR + encodeURIComponent(id) + ".mp4";
+  clipEl.playbackRate = rate;
+  const p = clipEl.play();
+  if (p && p.catch) p.catch(() => {});
+  return true;
+}
+function playExact(seg, rate) {
+  const c = ctx(); if (!c || !sprBuf) return false;
   node = c.createBufferSource();
   node.buffer = sprBuf; node.playbackRate.value = rate;
   node.connect(c.destination);
   node.start(0, seg[0], seg[1] + .04);
   return true;
 }
-function playRough(seg, rate) {                       // тот же файл через <audio>, пока буфер не готов
+function playRough(seg, rate) {
   if (!el) { el = new Audio("ossa.mp4"); el.preload = "auto"; }
   const go = () => {
     clearTimeout(stopAt);
@@ -342,7 +359,7 @@ function speakBrowser(t, slow) {
   u.rate = slow ? .55 : .8;
   speechSynthesis.speak(u);
 }
-function say(t, slow) {                               // вызывается прямо из обработчика клика
+function say(t, slow) {                               // всегда вызывается прямо из обработчика нажатия
   const rate = slow ? .75 : 1;
   stopAll();
   if (state.recs[t.id]) {                             // своя запись важнее эталона
@@ -353,6 +370,7 @@ function say(t, slow) {                               // вызывается п
     });
     return;
   }
+  if (playClip(t.id, rate)) return;
   const seg = HAS_SPRITE && SPRITE[t.id];
   if (seg) {
     if (sprBuf) { if (playExact(seg, rate)) return; }
@@ -478,7 +496,7 @@ function nextCard(first) {
   state.cur = queue[0] || list[0];
   state.answered = null;
   state.opts = makeOpts(state.cur);
-  if (!first && state.mode === "audio") setTimeout(() => say(state.cur), 180);
+  if (!first && state.mode === "audio") say(state.cur);
 }
 function renderDrill() {
   if (!state.cur || (state.mode === "stress" && !state.cur.single)) nextCard(true);
@@ -529,8 +547,8 @@ function answer(ok, chosen) {
   p.box = ok ? Math.min(4, p.box + 1) : 0;
   p.due = Date.now() + BOX_DAYS[p.box] * 864e5;
   state.progress[state.cur.id] = p;
+  if (state.mode !== "audio") say(state.cur);            // синхронно: иначе телефон сочтёт жест утерянным
   save(); render();
-  if (state.mode !== "audio") setTimeout(() => say(state.cur), 120);
 }
 
 /* ── правила ───────────────────────────────────────── */
