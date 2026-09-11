@@ -265,36 +265,62 @@ let VOICES = [];
 const loadVoices = () => { try { VOICES = speechSynthesis.getVoices() || []; } catch (e) {} };
 if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
 const voiceFor = p => VOICES.find(v => v.lang.replace("_", "-").toLowerCase().indexOf(p) === 0);
-let player = null, stopAt = null;
-const sprite = typeof SPRITE === "object" ? new Audio("ossa.mp4") : null;
-if (sprite) { sprite.preload = "auto"; sprite.load(); }
-
-function playSprite(id, rate) {
-  const seg = sprite && SPRITE[id];
-  if (!seg) return false;
-  const go = () => {
-    clearTimeout(stopAt);
-    sprite.playbackRate = rate;
-    try { sprite.currentTime = Math.max(0, seg[0] - .02); } catch (e) { return; }
-    sprite.play().catch(() => {});
-    stopAt = setTimeout(() => sprite.pause(), (seg[1] / rate) * 1000 + 110);
-  };
-  if (sprite.readyState >= 1) go();
-  else sprite.addEventListener("loadedmetadata", go, { once: true });
+/* Звук. Все термины лежат в одном файле; на мобильных перемотка по таймеру
+   ненадёжна, поэтому отрезок вырезается через Web Audio — семплово точно. */
+const AC = window.AudioContext || window.webkitAudioContext;
+let actx = null, sprBuf = null, sprRaw = null, node = null, decoding = null, player = null;
+if (AC && typeof SPRITE === "object") {
+  fetch("ossa.mp4").then(r => r.arrayBuffer()).then(b => { sprRaw = b; }).catch(() => {});
+  addEventListener("pointerdown", () => { buffer(); }, { once: true });   // прогреваем на первом касании
+}
+function ctx() {
+  if (!actx && AC) { try { actx = new AC(); } catch (e) { return null; } }
+  if (actx && actx.state === "suspended") actx.resume();
+  return actx;
+}
+function buffer() {
+  if (sprBuf) return Promise.resolve(sprBuf);
+  const c = ctx(); if (!c) return Promise.resolve(null);
+  if (!decoding) decoding = (async () => {
+    const raw = sprRaw || await fetch("ossa.mp4").then(r => r.arrayBuffer());
+    sprBuf = await c.decodeAudioData(raw.slice(0));                        // decodeAudioData забирает буфер себе
+    return sprBuf;
+  })().catch(() => null);
+  return decoding;
+}
+function stopAll() {
+  if (node) { try { node.stop(); } catch (e) {} node = null; }
+  if (player) { player.pause(); player = null; }
+  if (window.speechSynthesis) speechSynthesis.cancel();
+}
+async function playSeg(id, rate) {
+  const seg = typeof SPRITE === "object" && SPRITE[id];
+  if (!seg || !AC) return false;
+  const c = ctx(); if (!c) return false;
+  const b = await buffer(); if (!b) return false;
+  stopAll();
+  node = c.createBufferSource();
+  node.buffer = b;
+  node.playbackRate.value = rate;
+  node.connect(c.destination);
+  node.start(0, seg[0], seg[1] + .04);
   return true;
 }
 async function say(t, slow) {
-  const rate = slow ? .65 : 1;
-  if (player) { player.pause(); player = null; }
+  const rate = slow ? .75 : 1;
   const rec = state.recs[t.id];
-  if (rec) {
+  if (rec) {                                                               // своя запись важнее эталона
     const local = await idbGet(t.id);
-    const url = local ? URL.createObjectURL(local) : null;
-    if (url) { if (sprite) sprite.pause(); player = new Audio(url); player.playbackRate = rate; player.play().catch(() => {}); return; }
+    if (local) {
+      stopAll();
+      player = new Audio(URL.createObjectURL(local));
+      player.playbackRate = rate; player.play().catch(() => {});
+      return;
+    }
   }
-  if (playSprite(t.id, rate)) return;
-  if (!window.speechSynthesis) return;                      // запасной путь: голос браузера
-  speechSynthesis.cancel();
+  if (await playSeg(t.id, rate)) return;
+  if (!window.speechSynthesis) return;                                     // запасной путь: голос браузера
+  stopAll();
   const u = new SpeechSynthesisUtterance(t.say);
   u.voice = voiceFor("ru") || null; u.lang = "ru-RU";
   u.rate = slow ? .55 : .8;
