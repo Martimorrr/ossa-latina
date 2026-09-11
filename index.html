@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Ударение в латинской остеологической номенклатуре: 266 терминов со слогоделением, транскрипцией, озвучкой и тренажёром">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ossa Latina">
+<meta property="og:description" content="Ударение в латинской остеологической номенклатуре: 266 терминов со слогоделением, транскрипцией, озвучкой и тренажёром">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦴</text></svg>">
+<style>:root{color-scheme:light dark}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Ossa Latina</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#E7EBEE; --surface:#F5F8F9; --raised:#FFFFFF;
+  --ink:#131A21; --ink2:#55626D; --ink3:#87949F;
+  --line:#C7D0D7; --line-soft:#DDE4E9;
+  --accent:#27446F; --accent-soft:#DFE7F1; --accent-ink:#27446F;
+  --stress:#A3232E; --stress-soft:#F3DEDF;
+  --bone:#E4D9C3; --bone-line:#CDBD9C; --bone-ink:#57492C;
+  --ok:#2C6A4E; --ok-soft:#DCEBE2;
+  --bad:#A3232E; --bad-soft:#F3DEDF;
+  --shadow:0 1px 2px rgba(19,26,33,.06), 0 6px 18px -10px rgba(19,26,33,.22);
+  --sans:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme="light"]){
+  --ground:#0F151A; --surface:#171F26; --raised:#1D272F;
+  --ink:#DFE6EC; --ink2:#9BA8B4; --ink3:#6C7A88;
+  --line:#2C3742; --line-soft:#232E38;
+  --accent:#90B4E3; --accent-soft:#1E2E3E; --accent-ink:#A9C6EC;
+  --stress:#E7818B; --stress-soft:#382125;
+  --bone:#2E2820; --bone-line:#4A4032; --bone-ink:#D8C9A6;
+  --ok:#7FC49E; --ok-soft:#1B2C24;
+  --bad:#E7818B; --bad-soft:#382125;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+}
+:root[data-theme="dark"]{
+  --ground:#0F151A; --surface:#171F26; --raised:#1D272F;
+  --ink:#DFE6EC; --ink2:#9BA8B4; --ink3:#6C7A88;
+  --line:#2C3742; --line-soft:#232E38;
+  --accent:#90B4E3; --accent-soft:#1E2E3E; --accent-ink:#A9C6EC;
+  --stress:#E7818B; --stress-soft:#382125;
+  --bone:#2E2820; --bone-line:#4A4032; --bone-ink:#D8C9A6;
+  --ok:#7FC49E; --ok-soft:#1B2C24;
+  --bad:#E7818B; --bad-soft:#382125;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ── шапка ─────────────────────────────────────────── */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--ground) 88%, transparent);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:10px 20px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;line-height:1.15;margin-right:4px}
+.brand b{font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:.01em}
+.brand b i{font-style:normal;color:var(--stress)}
+.brand span{font-size:11px;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
+.tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px}
+.tabs button{padding:5px 13px;border-radius:6px;font-size:13.5px;font-weight:450;color:var(--ink2)}
+.tabs button[aria-selected="true"]{background:var(--raised);color:var(--ink);box-shadow:var(--shadow);font-weight:500}
+.search{flex:1;min-width:170px;max-width:340px;margin-left:auto;position:relative}
+.search input{width:100%;padding:7px 11px 7px 32px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px}
+.search input::placeholder{color:var(--ink3)}
+.search svg{position:absolute;left:10px;top:9px;color:var(--ink3)}
+.voice-pick{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2)}
+.voice-pick select{font:inherit;font-size:12.5px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+
+/* ── каркас ────────────────────────────────────────── */
+main{display:grid;grid-template-columns:246px minmax(0,1fr);gap:26px;max-width:1180px;margin:0 auto;padding:22px 20px 80px}
+aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:column;gap:18px}
+.side-h{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;font-weight:500}
+.sec-list{display:flex;flex-direction:column;gap:1px}
+.sec-list button{display:flex;justify-content:space-between;align-items:baseline;gap:8px;text-align:left;padding:6px 9px;border-radius:6px;font-size:13.5px;color:var(--ink2)}
+.sec-list button:hover{background:var(--surface)}
+.sec-list button[aria-current="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:500}
+.sec-list .n{font-family:var(--mono);font-size:11px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.sec-list button[aria-current="true"] .n{color:var(--accent-ink)}
+
+/* ── прогресс ──────────────────────────────────────── */
+.prog{border-top:1px solid var(--line-soft);padding-top:14px}
+.prog-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--line-soft);margin-bottom:9px}
+.prog-bar i{display:block;height:100%}
+.prog-legend{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink2)}
+.prog-legend div{display:flex;align-items:center;gap:6px}
+.prog-legend b{font-family:var(--mono);font-weight:500;margin-left:auto;font-variant-numeric:tabular-nums;color:var(--ink)}
+.dot{width:7px;height:7px;border-radius:2px;flex:none}
+
+/* ── карточка термина ──────────────────────────────── */
+.count{font-size:12.5px;color:var(--ink3);margin-bottom:12px;font-variant-numeric:tabular-nums}
+.terms{display:flex;flex-direction:column;gap:1px;background:var(--line-soft);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.term{background:var(--surface)}
+.term-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:11px 14px}
+.term-head:hover{background:var(--raised)}
+.term[data-open="1"]{background:var(--raised)}
+.head-main{display:grid;gap:2px;text-align:left;min-width:0}
+.la{font-family:var(--serif);font-size:19.5px;font-style:italic;line-height:1.25;letter-spacing:.005em}
+.tr{font-size:13px;color:var(--ink2)}
+.term-tools{display:flex;align-items:center;gap:6px}
+.icon-btn{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink2);flex:none}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.icon-btn.rec{border-color:var(--stress);color:var(--stress)}
+.icon-btn[data-on="1"]{background:var(--stress);border-color:var(--stress);color:#fff;animation:pulse 1.3s infinite}
+@keyframes pulse{50%{opacity:.55}}
+.has-rec{position:relative}
+.has-rec::after{content:"";position:absolute;right:-1px;top:-1px;width:7px;height:7px;border-radius:50%;background:var(--stress);border:1.5px solid var(--raised)}
+
+/* ── просодия ──────────────────────────────────────── */
+.body{padding:2px 14px 16px;display:grid;gap:13px}
+.scan{background:var(--bone);border:1px solid var(--bone-line);border-radius:8px;padding:13px 15px 11px;overflow-x:auto}
+.scan-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:0 3px}
+.word{display:flex;align-items:flex-end;margin-right:15px}
+.syl{display:flex;flex-direction:column;align-items:center;padding:0 4px}
+.mark{font-family:var(--mono);font-size:11px;line-height:1;height:13px;color:var(--bone-ink);opacity:.65}
+.syl-t{font-family:var(--serif);font-size:20px;line-height:1.2;color:var(--bone-ink)}
+.syl.on .syl-t{color:var(--stress);font-weight:600;border-bottom:2px solid var(--stress);padding-bottom:1px}
+.syl.on .mark{color:var(--stress);opacity:1}
+.sep{font-family:var(--serif);font-size:17px;color:var(--bone-ink);opacity:.35;align-self:flex-end;padding-bottom:2px}
+.say{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;font-size:16.5px;letter-spacing:.01em}
+.say .lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:500}
+.say b{font-weight:600;color:var(--stress)}
+.slow{margin-left:auto;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);border-bottom:1px dotted var(--line)}
+.slow:hover{color:var(--accent-ink);border-color:var(--accent)}
+.rule{display:flex;gap:11px;align-items:flex-start;background:var(--surface);border:1px solid var(--line-soft);border-left:3px solid var(--accent);border-radius:0 7px 7px 0;padding:10px 13px}
+.rule .rn{font-family:var(--mono);font-size:12px;color:var(--accent-ink);white-space:nowrap;font-weight:500;padding-top:1px}
+.rule p{margin:0;font-size:13.5px;color:var(--ink2);max-width:62ch}
+.rec-row{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink3);flex-wrap:wrap}
+.mic-err{flex-basis:100%;color:var(--stress);font-size:12.5px;line-height:1.45;max-width:62ch}
+.rec-row label{cursor:pointer}
+.rec-row button.link{font-size:12.5px;color:var(--accent-ink);text-decoration:underline;text-underline-offset:2px}
+
+/* ── тренировка ────────────────────────────────────── */
+.drill-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{padding:6px 12px;border:1px solid var(--line);border-radius:20px;font-size:13px;color:var(--ink2);background:var(--surface)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--ground);font-weight:500}
+.score{margin-left:auto;font-family:var(--mono);font-size:12.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.score b{color:var(--ok)} .score i{color:var(--bad);font-style:normal}
+.card{background:var(--raised);border:1px solid var(--line);border-radius:12px;padding:26px 24px;box-shadow:var(--shadow);min-height:340px;display:flex;flex-direction:column;gap:20px}
+.ask{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);font-weight:500}
+.quiz-term{font-family:var(--serif);font-size:34px;font-style:italic;line-height:1.15;text-wrap:balance}
+.quiz-ru{font-size:26px;line-height:1.25;font-weight:450;text-wrap:balance}
+.opts{display:grid;gap:7px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.opt{text-align:left;padding:11px 14px;border:1px solid var(--line);border-radius:9px;background:var(--surface);font-size:15px;transition:border-color .12s,background .12s}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:500}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt em{font-family:var(--serif);font-style:italic;font-size:17px}
+.syl-pick{display:flex;flex-wrap:wrap;gap:0 18px}
+.syl-btn{font-family:var(--serif);font-size:30px;padding:4px 10px 2px;border-bottom:2px solid var(--line);color:var(--ink)}
+.syl-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-ink)}
+.syl-btn:disabled{cursor:default}
+.syl-btn.right{color:var(--ok);border-color:var(--ok);font-weight:600}
+.syl-btn.wrong{color:var(--bad);border-color:var(--bad);text-decoration:line-through}
+.verdict{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--bad)}
+.next{margin-top:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.btn{padding:9px 20px;border-radius:8px;background:var(--accent);color:var(--ground);font-weight:500;font-size:14.5px}
+.btn:hover{filter:brightness(1.12)}
+.btn.ghost{background:var(--surface);border:1px solid var(--line);color:var(--ink2)}
+.hint{font-size:12.5px;color:var(--ink3)}
+.big-play{display:flex;align-items:center;gap:13px;padding:18px;border:1px dashed var(--line);border-radius:10px;background:var(--surface)}
+.big-play button{width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--ground);display:grid;place-items:center;flex:none}
+
+/* ── правила ───────────────────────────────────────── */
+.rules-wrap{display:grid;gap:22px;max-width:760px}
+.rules-wrap h2{font-family:var(--serif);font-size:24px;font-weight:600;margin:0 0 4px}
+.rules-wrap h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 9px;font-weight:500}
+.rule-grid{display:grid;gap:1px;background:var(--line-soft);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rule-grid > div{background:var(--surface);padding:11px 14px;display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;align-items:baseline}
+.rule-grid code{font-family:var(--mono);font-size:13px;color:var(--accent-ink);background:none}
+.rule-grid p{margin:0;font-size:13.5px;color:var(--ink2)}
+.rule-grid em{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink)}
+.lead{font-size:14.5px;color:var(--ink2);max-width:65ch;margin:0 0 14px}
+.empty{padding:40px 0;text-align:center;color:var(--ink3);font-size:14px}
+
+@media (max-width:860px){
+  main{grid-template-columns:minmax(0,1fr);gap:16px;padding:14px 14px 60px}
+  aside{position:static;flex-direction:column}
+  .sec-list{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:thin}
+  .sec-list button{white-space:nowrap;border:1px solid var(--line);border-radius:18px;padding:5px 12px}
+  .prog{border-top:none;padding-top:0}
+  .brand span{display:none}
+  .search{margin-left:0;max-width:none;order:3;width:100%}
+  .quiz-term{font-size:27px} .quiz-ru{font-size:21px}
+  .card{padding:18px 16px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><b>os<i>·</i>sa</b><span>ударение в остеологии</span></div>
+  <nav class="tabs" id="tabs" role="tablist">
+    <button role="tab" data-v="ref" aria-selected="true">Справочник</button>
+    <button role="tab" data-v="drill" aria-selected="false">Тренировка</button>
+    <button role="tab" data-v="rules" aria-selected="false">Правила</button>
+  </nav>
+  <div class="search">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
+    <input id="q" type="search" placeholder="Поиск: латынь или перевод" autocomplete="off">
+  </div>
+</header>
+
+<main>
+  <aside id="side"></aside>
+  <div id="stage"></div>
+</main>
+
+<script src="terms.js"></script>
+<script src="audio.js"></script>
+<script>
+"use strict";
+const $ = (s, r) => (r || document).querySelector(s);
+const NFD = s => s.normalize("NFD");
+const bare = s => NFD(s).replace(/[\u0304\u0306]/g, "").normalize("NFC");
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const VOW = /[аеёиоуыэюя]/;
+
+/* ── модель ────────────────────────────────────────── */
+function accent(s) { const m = s.match(VOW); return m ? s.slice(0, m.index + 1) + "\u0301" + s.slice(m.index + 1) : s; }
+
+const DATA = TERMS.map(([laRaw, ruRaw, tr, rule, sec]) => {
+  const lw = laRaw.split(" "), rw = ruRaw.split(" "), syls = [];
+  lw.forEach((w, wi) => w.split("·").forEach((s, si) => syls.push({
+    la: s, ru: rw[wi].split("·")[si], w: wi,
+    stress: s !== s.toLowerCase(),
+    long: /\u0304/.test(NFD(s)), short: /\u0306/.test(NFD(s))
+  })));
+  let say = "", cw = 0;
+  syls.forEach(s => { if (s.w !== cw) { say += " "; cw = s.w; } say += s.stress ? accent(s.ru.toLowerCase()) : s.ru.toLowerCase(); });
+  const la = bare(laRaw.replace(/·/g, "")).toLowerCase();
+  return { id: la.replace(/\s+/g, "-"), la, tr, rule, sec, syls, say,
+           single: syls.filter(s => s.stress).length === 1,
+           hay: (la + " " + tr).toLowerCase() };
+});
+const BY_ID = Object.fromEntries(DATA.map(t => [t.id, t]));
+const BOX_DAYS = [0, 1, 3, 7, 21];
+
+const state = {
+  view: "ref", sec: SECTIONS[0][0], q: "", open: "tuberculum",
+  mode: "stress", scope: "all",
+  cur: null, answered: null, score: { r: 0, w: 0 },
+  progress: (() => { try { return JSON.parse(localStorage.getItem("ossa.progress") || "{}"); } catch (e) { return {}; } })(),
+  recs: (() => { try { return JSON.parse(localStorage.getItem("ossa.recs") || "{}"); } catch (e) { return {}; } })()
+};
+
+/* ── платформа: db + assets + локальное аудио ──────── */
+const idb = () => new Promise(res => {
+  const r = indexedDB.open("ossa", 1);
+  r.onupgradeneeded = () => r.result.createObjectStore("audio");
+  r.onsuccess = () => res(r.result); r.onerror = () => res(null);
+});
+async function idbPut(k, v) { const d = await idb(); if (!d) return; d.transaction("audio", "readwrite").objectStore("audio").put(v, k); }
+async function idbGet(k) {
+  const d = await idb(); if (!d) return null;
+  return new Promise(res => { const r = d.transaction("audio").objectStore("audio").get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); });
+}
+const save = () => {                                  // прогресс и записи живут в браузере посетителя
+  try {
+    localStorage.setItem("ossa.progress", JSON.stringify(state.progress));
+    localStorage.setItem("ossa.recs", JSON.stringify(state.recs));
+  } catch (e) {}
+};
+
+/* ── речь ──────────────────────────────────────────── */
+let VOICES = [];
+const loadVoices = () => { try { VOICES = speechSynthesis.getVoices() || []; } catch (e) {} };
+if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+const voiceFor = p => VOICES.find(v => v.lang.replace("_", "-").toLowerCase().indexOf(p) === 0);
+let player = null, stopAt = null;
+const sprite = typeof SPRITE === "object" ? new Audio("ossa.mp4") : null;
+if (sprite) { sprite.preload = "auto"; sprite.load(); }
+
+function playSprite(id, rate) {
+  const seg = sprite && SPRITE[id];
+  if (!seg) return false;
+  const go = () => {
+    clearTimeout(stopAt);
+    sprite.playbackRate = rate;
+    try { sprite.currentTime = Math.max(0, seg[0] - .02); } catch (e) { return; }
+    sprite.play().catch(() => {});
+    stopAt = setTimeout(() => sprite.pause(), (seg[1] / rate) * 1000 + 110);
+  };
+  if (sprite.readyState >= 1) go();
+  else sprite.addEventListener("loadedmetadata", go, { once: true });
+  return true;
+}
+async function say(t, slow) {
+  const rate = slow ? .65 : 1;
+  if (player) { player.pause(); player = null; }
+  const rec = state.recs[t.id];
+  if (rec) {
+    const local = await idbGet(t.id);
+    const url = local ? URL.createObjectURL(local) : null;
+    if (url) { if (sprite) sprite.pause(); player = new Audio(url); player.playbackRate = rate; player.play().catch(() => {}); return; }
+  }
+  if (playSprite(t.id, rate)) return;
+  if (!window.speechSynthesis) return;                      // запасной путь: голос браузера
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t.say);
+  u.voice = voiceFor("ru") || null; u.lang = "ru-RU";
+  u.rate = slow ? .55 : .8;
+  speechSynthesis.speak(u);
+}
+
+/* ── иконки ────────────────────────────────────────── */
+const ICON = {
+  play: '<svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor"><path d="M4 2.4v9.2l7.5-4.6z"/></svg>',
+  bigplay: '<svg width="20" height="20" viewBox="0 0 14 14" fill="currentColor"><path d="M4 2.4v9.2l7.5-4.6z"/></svg>',
+  mic: '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1.4" width="4" height="7" rx="2"/><path d="M2.8 6.6a4.2 4.2 0 0 0 8.4 0M7 10.8v1.8"/></svg>',
+  upload: '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 9.6V2.2M4.2 5l2.8-2.8L9.8 5M2.2 9.4v1.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4V9.4"/></svg>',
+  stop: '<svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="2" width="8" height="8" rx="1.5"/></svg>'
+};
+
+/* ── просодическая строка ──────────────────────────── */
+function scanHTML(t, opts) {
+  const o = opts || {}, words = [];
+  t.syls.forEach(s => { (words[s.w] = words[s.w] || []).push(s); });
+  const body = words.map(ws => '<span class="word">' + ws.map((s, i) => {
+    const mark = o.blind ? "" : (s.long ? "‾" : s.short ? "˘" : "");
+    const text = o.blind ? bare(s.la).toLowerCase() : s.la.toLowerCase();
+    return (i ? '<span class="sep">·</span>' : "") +
+      '<span class="syl' + (!o.blind && s.stress ? " on" : "") + '"><span class="mark">' + mark + '</span><span class="syl-t">' + esc(text) + "</span></span>";
+  }).join("") + "</span>").join("");
+  return '<div class="scan"><div class="scan-row">' + body + "</div></div>";
+}
+function sayHTML(t) {
+  const words = [];
+  t.syls.forEach(s => { (words[s.w] = words[s.w] || []).push(s); });
+  const body = words.map(ws => ws.map((s, i) => (i ? '<span style="opacity:.3">·</span>' : "") +
+    (s.stress ? "<b>" + esc(accent(s.ru.toLowerCase())) + "</b>" : esc(s.ru.toLowerCase()))).join("")).join(" ");
+  return '<div class="say"><span class="lab">читается</span>' + body +
+    '<button class="slow" data-act="say-slow">медленно</button></div>';
+}
+function ruleHTML(t) {
+  const r = RULES[t.rule];
+  return '<div class="rule"><span class="rn">' + esc(r[0]) + "</span><p>" + esc(r[1]) + "</p></div>";
+}
+
+/* ── справочник ────────────────────────────────────── */
+function filtered() {
+  const q = state.q.trim().toLowerCase();
+  if (q) return DATA.filter(t => t.hay.indexOf(q) >= 0);
+  return state.sec === "all" ? DATA : DATA.filter(t => t.sec === state.sec);
+}
+function termHTML(t) {
+  const open = state.open === t.id, rec = state.recs[t.id];
+  return '<article class="term" data-id="' + t.id + '" data-open="' + (open ? 1 : 0) + '">' +
+    '<div class="term-head"><button class="head-main" data-act="open" aria-expanded="' + open + '">' +
+      '<span class="la">' + esc(t.la) + '</span><span class="tr">' + esc(t.tr) + '</span></button>' +
+      '<span class="term-tools">' +
+        '<button class="icon-btn' + (rec ? " has-rec" : "") + '" data-act="say" title="Прослушать">' + ICON.play + '</button>' +
+      '</span></div>' +
+    (open ? '<div class="body">' + scanHTML(t) + sayHTML(t) + ruleHTML(t) + recRowHTML(t) + '</div>' : "") +
+  "</article>";
+}
+function recRowHTML(t) {
+  const rec = state.recs[t.id];
+  return '<div class="rec-row">' +
+    '<button class="icon-btn rec" data-act="rec" title="Записать с микрофона">' + ICON.mic + '</button>' +
+    '<label class="icon-btn rec" title="Загрузить аудиофайл">' + ICON.upload +
+      '<input type="file" accept="audio/*" capture data-term="' + t.id + '" hidden></label>' +
+    (rec ? '<span>Звучит ваша запись вместо синтеза</span><button class="link" data-act="unrec">удалить</button>'
+         : '<span>Запишите или загрузите произношение — оно заменит синтезированный голос</span>') +
+    (state.micErr === t.id ? '<span class="mic-err">Запись с микрофона недоступна: страница открыта внутри рамки claude.ai, и браузер блокирует микрофон независимо от ваших разрешений. Запишите на диктофон телефона и загрузите файл — вторая кнопка.</span>' : "") +
+  "</div>";
+}
+function renderRef() {
+  const list = filtered();
+  const secName = state.q ? "найдено" : (SECTIONS.find(s => s[0] === state.sec) || [, "Все разделы"])[1];
+  $("#stage").innerHTML = list.length
+    ? '<div class="count">' + esc(secName) + ' · ' + list.length + ' ' + plural(list.length, "термин", "термина", "терминов") + '</div><div class="terms">' + list.map(termHTML).join("") + "</div>"
+    : '<div class="empty">Ничего не нашлось. Попробуйте часть слова — «tuber», «отросток».</div>';
+}
+const plural = (n, a, b, c) => { const m = n % 100, k = n % 10; return m > 10 && m < 20 ? c : k === 1 ? a : k > 1 && k < 5 ? b : c; };
+
+/* ── боковая колонка ───────────────────────────────── */
+function renderSide() {
+  if (state.view === "rules") { $("#side").innerHTML = progHTML(); return; }
+  const drill = state.view === "drill", cur = drill ? state.scope : state.sec;
+  const counts = {}; DATA.forEach(t => counts[t.sec] = (counts[t.sec] || 0) + 1);
+  const rows = [["all", drill ? "Всё сразу" : "Все разделы", DATA.length]]
+    .concat(SECTIONS.map(s => [s[0], s[1], counts[s[0]] || 0]));
+  $("#side").innerHTML = '<div><div class="side-h">' + (drill ? "Что тренируем" : "Разделы") + '</div><div class="sec-list">' +
+    rows.map(r => '<button data-sec="' + r[0] + '" aria-current="' + (cur === r[0]) + '"><span>' + esc(r[1]) + '</span><span class="n">' + r[2] + "</span></button>").join("") +
+    "</div></div>" + progHTML();
+}
+function progHTML() {
+  let learned = 0, work = 0;
+  DATA.forEach(t => { const p = state.progress[t.id]; if (!p) return; if (p.box >= 3) learned++; else work++; });
+  const fresh = DATA.length - learned - work, pc = n => (n / DATA.length * 100).toFixed(2) + "%";
+  return '<div class="prog"><div class="side-h">Прогресс</div>' +
+    '<div class="prog-bar"><i style="width:' + pc(learned) + ';background:var(--ok)"></i><i style="width:' + pc(work) + ';background:var(--accent)"></i></div>' +
+    '<div class="prog-legend">' +
+      '<div><span class="dot" style="background:var(--ok)"></span>Закреплено<b>' + learned + "</b></div>" +
+      '<div><span class="dot" style="background:var(--accent)"></span>В работе<b>' + work + "</b></div>" +
+      '<div><span class="dot" style="background:var(--line)"></span>Не начато<b>' + fresh + "</b></div>" +
+    "</div></div>";
+}
+
+/* ── тренировка ────────────────────────────────────── */
+const MODES = [["stress", "Ударение"], ["la2ru", "Латынь → перевод"], ["ru2la", "Перевод → латынь"], ["audio", "На слух"]];
+function pool() {
+  let l = state.scope === "all" ? DATA : DATA.filter(t => t.sec === state.scope);
+  return state.mode === "stress" ? l.filter(t => t.single) : l;
+}
+function makeOpts(t) {
+  if (state.mode === "stress") return null;
+  const near = shuffle(DATA.filter(x => x.sec === t.sec && x.id !== t.id && x.tr !== t.tr)).slice(0, 3);
+  const far = shuffle(DATA.filter(x => x.id !== t.id && x.tr !== t.tr));
+  while (near.length < 3) { const c = far.pop(); if (c && near.indexOf(c) < 0) near.push(c); }
+  return shuffle(near.concat([t]));
+}
+function nextCard(first) {
+  const list = pool();
+  if (!list.length) { state.cur = null; return; }
+  const now = Date.now(), due = [], fresh = [], rest = [];
+  list.forEach(t => { const p = state.progress[t.id]; if (!p) fresh.push(t); else if (p.due <= now) due.push(t); else rest.push(t); });
+  const queue = shuffle(due).concat(shuffle(fresh), shuffle(rest)).filter(t => !state.cur || t.id !== state.cur.id);
+  state.cur = queue[0] || list[0];
+  state.answered = null;
+  state.opts = makeOpts(state.cur);
+  if (!first && state.mode === "audio") setTimeout(() => say(state.cur), 180);
+}
+function renderDrill() {
+  if (!state.cur || (state.mode === "stress" && !state.cur.single)) nextCard(true);
+  const t = state.cur, a = state.answered;
+  let card;
+  if (!t) card = '<div class="card"><div class="empty">В этом разделе нет слов для такого режима. Выберите другой раздел или режим.</div></div>';
+  else {
+    let q = "";
+    if (state.mode === "stress") {
+      q = '<div class="ask">Где ударение?</div>' + (a ? scanHTML(t) : '<div class="scan">' + sylPick(t) + "</div>") +
+          '<div class="hint">' + esc(t.tr) + "</div>";
+    } else if (state.mode === "la2ru") {
+      q = '<div class="ask">Что это значит?</div><div class="quiz-term">' + esc(t.la) + "</div>" + optsHTML(x => x.tr);
+    } else if (state.mode === "ru2la") {
+      q = '<div class="ask">Как по-латински?</div><div class="quiz-ru">' + esc(t.tr) + "</div>" + optsHTML(x => "<em>" + esc(x.la) + "</em>");
+    } else {
+      q = '<div class="ask">Что вы слышите?</div><div class="big-play"><button data-act="say-cur" aria-label="Повторить">' + ICON.bigplay +
+          '</button><button class="btn ghost" data-act="say-cur-slow">медленно</button><span class="hint">или клавиши 1–4</span></div>' + optsHTML(x => "<em>" + esc(x.la) + "</em>");
+    }
+    const after = a ? '<div class="verdict ' + (a.ok ? "ok" : "no") + '">' + (a.ok ? "Верно" : "Правильно: " + esc(t.la)) + "</div>" +
+        (state.mode === "stress" ? sayHTML(t) + ruleHTML(t) : scanHTML(t) + sayHTML(t) + ruleHTML(t)) : "";
+    card = '<div class="card">' + q + after +
+      '<div class="next">' + (a ? '<button class="btn" data-act="next">Дальше →</button><button class="btn ghost" data-act="say-cur">' + ICON.play + " Повторить</button>" : '<span class="hint">Выберите вариант — можно клавишами 1–4</span>') + "</div></div>";
+  }
+  $("#stage").innerHTML =
+    '<div class="drill-top"><div class="chips">' + MODES.map(m => '<button class="chip" data-mode="' + m[0] + '" aria-pressed="' + (state.mode === m[0]) + '">' + m[1] + "</button>").join("") + "</div>" +
+    '<div class="score">верно <b>' + state.score.r + "</b> · ошибок <i>" + state.score.w + "</i></div></div>" + card;
+}
+function sylPick(t) {
+  const words = []; t.syls.forEach(s => { (words[s.w] = words[s.w] || []).push(s); });
+  let n = -1;
+  return '<div class="syl-pick">' + words.map(ws => '<span class="word">' + ws.map((s, i) => {
+    n++; return (i ? '<span class="sep">·</span>' : "") + '<button class="syl-btn" data-syl="' + n + '">' + esc(bare(s.la).toLowerCase()) + "</button>";
+  }).join("") + "</span>").join("") + "</div>";
+}
+function optsHTML(fmt) {
+  const a = state.answered;
+  return '<div class="opts">' + state.opts.map((x, i) => {
+    let cls = "";
+    if (a) cls = x.id === state.cur.id ? " right" : (a.chosen === x.id ? " wrong" : "");
+    return '<button class="opt' + cls + '" data-opt="' + x.id + '"' + (a ? " disabled" : "") + ">" + fmt(x) + "</button>";
+  }).join("") + "</div>";
+}
+function answer(ok, chosen) {
+  state.answered = { ok: ok, chosen: chosen };
+  state.score[ok ? "r" : "w"]++;
+  const p = state.progress[state.cur.id] || { box: 0 };
+  p.box = ok ? Math.min(4, p.box + 1) : 0;
+  p.due = Date.now() + BOX_DAYS[p.box] * 864e5;
+  state.progress[state.cur.id] = p;
+  save(); render();
+  if (state.mode !== "audio") setTimeout(() => say(state.cur), 120);
+}
+
+/* ── правила ───────────────────────────────────────── */
+const READING = [
+  ["c", "[ц] перед e, i, y, ae, oe · [к] в остальных случаях", "cervicalis — цервика́лис · caput — ка́пут"],
+  ["s", "[з] между гласными и между гласной и m, n · иначе [с]", "nasalis — наза́лис · sinus — си́нус"],
+  ["ti", "[ци] перед гласной · [ти] после s, t, x", "articulatio — артикуля́цио · ostium — о́стиум"],
+  ["ae, oe", "[э] одним звуком", "vertebrae — вэ́ртэбрэ · coxae — ко́ксэ"],
+  ["au, eu", "[ау], [эу] — дифтонг в один слог", "auris — а́урис · pneumaticus — пнэума́тикус"],
+  ["qu", "[кв]", "squama — сква́ма · liquor — ли́квор"],
+  ["ngu", "[нгв] перед гласной", "lingua — ли́нгва · unguis — у́нгвис"],
+  ["ch, ph, rh, th", "[х], [ф], [р], [т]", "trochlea — тро́хлеа · phalanges — фаля́нгэс"],
+  ["j", "[й]; ju, ja — [ю], [я]", "major — ма́йор · jugularis — югуля́рис"],
+  ["h", "придыхательное [х]", "humerus — ху́мэрус · hamatum — хама́тум"],
+  ["l", "всегда мягкое [ль]", "lateralis — лятэра́лис · talus — та́люс"],
+  ["x, z", "[кс], [з]", "axis — а́ксис · zygomaticus — зигома́тикус"]
+];
+const LAWS = [
+  ["Закон 1", "Ударение никогда не падает на последний слог."],
+  ["Закон 2", "В двусложном слове ударение всегда на первом слоге: <em>costa</em> — ко́ста."],
+  ["Закон 3", "В слове из трёх и более слогов всё решает второй слог от конца: долгий — ударение на нём, краткий — ударение уходит на третий от конца."]
+];
+function renderRules() {
+  const groups = [
+    ["Суффикс долгий → ударение на предпоследнем", ["al", "ar", "at", "in", "os", "ur"]],
+    ["Суффикс краткий → ударение на третьем от конца", ["ul", "ol", "ic"]],
+    ["Долгота и краткость по положению", ["pos", "diph", "vav", "mutaliq", "ideus", "long", "short", "two"]]
+  ];
+  $("#stage").innerHTML = '<div class="rules-wrap">' +
+    '<section><h2>Три закона ударения</h2><p class="lead">Всё, что нужно, чтобы поставить ударение в незнакомом термине, не заглядывая в словарь.</p>' +
+    '<div class="rule-grid">' + LAWS.map(l => "<div><code>" + l[0] + "</code><p>" + l[1] + "</p></div>").join("") + "</div></section>" +
+    groups.map(g => '<section><h3>' + esc(g[0]) + '</h3><div class="rule-grid">' +
+      g[1].map(k => "<div><code>" + esc(RULES[k][0]) + "</code><p>" + esc(RULES[k][1]) + "</p></div>").join("") + "</div></section>").join("") +
+    '<section><h2>Как читаются буквы</h2><p class="lead">Транскрипция в справочнике следует этим правилам — тем, что приняты в русской медицинской традиции.</p>' +
+    '<div class="rule-grid">' + READING.map(r => "<div><code>" + esc(r[0]) + "</code><p>" + esc(r[1]) + '<br><em style="font-size:14px">' + esc(r[2]) + "</em></p></div>").join("") + "</div></section>" +
+    '<p class="lead" style="font-size:12.5px;border-top:1px solid var(--line-soft);padding-top:14px">Озвучка синтезирована моделью Silero v4 (голос xenia) по транскрипции с явно проставленным ударением, поэтому ударный слог всегда на месте. Свою запись можно подставить в карточке любого термина.</p>' +
+    '<p class="lead" style="font-size:12.5px">Ударения сверены по латинским леммам Викисловаря (формы с макронами и классическое IPA) и по учебнику медицинской латыни: из 102 слов, для которых нашлись словарные данные, совпали все. Термины на -oīdeus и os tríquetrum исправлены по итогам сверки.</p></div>';
+}
+
+/* ── запись эталона ────────────────────────────────── */
+let mrec = null;
+async function toggleRec(t, btn) {
+  if (mrec && mrec.state === "recording") { mrec.stop(); return; }
+  let stream;
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("no api");
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (e) { state.micErr = t.id; render(); return; }
+  state.micErr = null;
+  const chunks = [];
+  mrec = new MediaRecorder(stream);
+  mrec.ondataavailable = e => e.data.size && chunks.push(e.data);
+  mrec.onstop = async () => {
+    stream.getTracks().forEach(x => x.stop());
+    const blob = new Blob(chunks, { type: mrec.mimeType || "audio/webm" });
+    mrec = null;
+    addRec(t, blob);
+  };
+  mrec.start();
+  btn.dataset.on = "1"; btn.innerHTML = ICON.stop; btn.title = "Остановить запись";
+}
+async function addRec(t, blob) {
+  if (blob.size > 8e6) { state.micErr = t.id; render(); return; }
+  await idbPut(t.id, blob);
+  state.recs[t.id] = { at: Date.now(), type: blob.type };
+  save(); render();
+}
+document.addEventListener("change", e => {
+  const inp = e.target.closest('input[type="file"][data-term]');
+  if (inp && inp.files && inp.files[0]) addRec(BY_ID[inp.dataset.term], inp.files[0]);
+});
+async function dropRec(t) {
+  delete state.recs[t.id];
+  await idbPut(t.id, null);
+  save(); render();
+}
+
+/* ── события ───────────────────────────────────────── */
+function render() {
+  document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.v === state.view));
+  renderSide();
+  if (state.view === "ref") renderRef();
+  else if (state.view === "drill") renderDrill();
+  else renderRules();
+}
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-v],[data-sec],[data-mode],[data-opt],[data-syl],[data-act]");
+  if (!el) return;
+  const art = e.target.closest(".term"), t = art ? BY_ID[art.dataset.id] : null;
+  if (el.dataset.v) { state.view = el.dataset.v; if (state.view === "drill" && !state.cur) nextCard(true); render(); return; }
+  if (el.dataset.sec) {
+    if (state.view === "drill") { state.scope = el.dataset.sec; state.cur = null; nextCard(true); }
+    else { state.sec = el.dataset.sec; state.q = ""; $("#q").value = ""; }
+    render(); return;
+  }
+  if (el.dataset.mode) { state.mode = el.dataset.mode; state.cur = null; nextCard(true); render(); return; }
+  if (el.dataset.opt) { if (!state.answered) answer(el.dataset.opt === state.cur.id, el.dataset.opt); return; }
+  if (el.dataset.syl != null) {
+    if (state.answered) return;
+    const i = +el.dataset.syl, ok = state.cur.syls[i].stress;
+    el.classList.add(ok ? "right" : "wrong");
+    answer(ok, i); return;
+  }
+  switch (el.dataset.act) {
+    case "open": state.open = state.open === t.id ? null : t.id; render(); break;
+    case "say": say(t); break;
+    case "say-slow": say(t || state.cur, true); break;
+    case "say-cur": say(state.cur); break;
+    case "say-cur-slow": say(state.cur, true); break;
+    case "next": nextCard(); render(); break;
+    case "rec": toggleRec(t, el); break;
+    case "unrec": dropRec(t); break;
+  }
+});
+document.addEventListener("keydown", e => {
+  if (state.view !== "drill" || e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+  if (state.answered && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); nextCard(); render(); return; }
+  if (!state.answered && state.opts && /^[1-4]$/.test(e.key)) {
+    const x = state.opts[+e.key - 1]; if (x) answer(x.id === state.cur.id, x.id);
+  }
+});
+$("#q").addEventListener("input", e => { state.q = e.target.value; if (state.view !== "ref") state.view = "ref"; render(); });
+render();
+</script>
+</body>
+</html>
