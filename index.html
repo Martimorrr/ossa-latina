@@ -130,6 +130,21 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
 .say b{font-weight:600;color:var(--stress)}
 .slow{margin-left:auto;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);border-bottom:1px dotted var(--line)}
 .slow:hover{color:var(--accent-ink);border-color:var(--accent)}
+.bone-btn{display:inline-flex;align-items:center;gap:8px;align-self:start;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13.5px;color:var(--accent-ink);font-weight:500}
+.bone-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(10,14,18,.55);backdrop-filter:blur(3px);display:grid;place-items:center;padding:20px}
+.modal-card{background:var(--raised);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px -20px rgba(0,0,0,.5);width:min(680px,100%);overflow:hidden;display:flex;flex-direction:column}
+.modal-head{display:flex;align-items:flex-start;gap:14px;padding:14px 16px 12px;border-bottom:1px solid var(--line-soft)}
+.modal-la{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.2}
+.modal-tr{font-size:12.5px;color:var(--ink2);margin-top:2px}
+.modal-x{margin-left:auto;width:30px;height:30px;border-radius:50%;color:var(--ink3);font-size:15px;line-height:1}
+.modal-x:hover{background:var(--surface);color:var(--ink)}
+.stage3d{height:min(52vh,400px);position:relative;background:linear-gradient(180deg,var(--surface),var(--ground));touch-action:none;cursor:grab}
+.stage3d:active{cursor:grabbing}
+.stage3d canvas{display:block}
+.stage-msg{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink3);font-size:13.5px;text-align:center;padding:0 24px}
+.modal-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;padding:10px 16px 12px;font-size:12px;color:var(--ink3);border-top:1px solid var(--line-soft)}
+.credit{margin-left:auto;opacity:.75}
 .rule{display:flex;gap:11px;align-items:flex-start;background:var(--surface);border:1px solid var(--line-soft);border-left:3px solid var(--accent);border-radius:0 7px 7px 0;padding:10px 13px}
 .rule .rn{font-family:var(--mono);font-size:12px;color:var(--accent-ink);white-space:nowrap;font-weight:500;padding-top:1px}
 .rule p{margin:0;font-size:13.5px;color:var(--ink2);max-width:62ch}
@@ -218,6 +233,7 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
 
 <script src="terms.js"></script>
 <script src="audio.js"></script>
+<script src="bones.js"></script>
 <script>
 "use strict";
 const $ = (s, r) => (r || document).querySelector(s);
@@ -384,6 +400,7 @@ const ICON = {
   play: '<svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor"><path d="M4 2.4v9.2l7.5-4.6z"/></svg>',
   bigplay: '<svg width="20" height="20" viewBox="0 0 14 14" fill="currentColor"><path d="M4 2.4v9.2l7.5-4.6z"/></svg>',
   mic: '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1.4" width="4" height="7" rx="2"/><path d="M2.8 6.6a4.2 4.2 0 0 0 8.4 0M7 10.8v1.8"/></svg>',
+  cube: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 1.6 14 5v6l-6 3.4L2 11V5z"/><path d="M2 5l6 3.4L14 5M8 8.4v6"/></svg>',
   upload: '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 9.6V2.2M4.2 5l2.8-2.8L9.8 5M2.2 9.4v1.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4V9.4"/></svg>',
   stop: '<svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="2" width="8" height="8" rx="1.5"/></svg>'
 };
@@ -427,8 +444,14 @@ function termHTML(t) {
       '<span class="term-tools">' +
         '<button class="icon-btn' + (rec ? " has-rec" : "") + '" data-act="say" title="Прослушать">' + ICON.play + '</button>' +
       '</span></div>' +
-    (open ? '<div class="body">' + scanHTML(t) + sayHTML(t) + ruleHTML(t) + recRowHTML(t) + '</div>' : "") +
+    (open ? '<div class="body">' + scanHTML(t) + sayHTML(t) + ruleHTML(t) + boneRowHTML(t) + recRowHTML(t) + '</div>' : "") +
   "</article>";
+}
+function boneRowHTML(t) {
+  const link = typeof TERM_3D === "object" && TERM_3D[t.id];
+  if (!link) return "";
+  return '<button class="bone-btn" data-act="show3d">' + ICON.cube +
+    'Показать на кости — ' + esc(BONES[link[0]].title.toLowerCase()) + '</button>';
 }
 function recRowHTML(t) {
   const rec = state.recs[t.id];
@@ -626,6 +649,144 @@ async function dropRec(t) {
   save(); render();
 }
 
+/* ── 3D: кость и точка структуры ───────────────────── */
+const THREE_URL = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+let threeReady = null, viewer = null, meshCache = {};
+
+function loadThree() {
+  if (window.THREE) return Promise.resolve();
+  if (!threeReady) threeReady = new Promise((res, rej) => {
+    const sc = document.createElement("script");
+    sc.src = THREE_URL; sc.onload = res; sc.onerror = rej;
+    document.head.appendChild(sc);
+  });
+  return threeReady;
+}
+function loadBone(key) {
+  if (meshCache[key]) return Promise.resolve(meshCache[key]);
+  return fetch(BONES[key].file).then(r => r.json()).then(d => (meshCache[key] = d));
+}
+function show3D(t) {
+  const link = TERM_3D[t.id]; if (!link) return;
+  const [key, labelName] = link;
+  document.body.insertAdjacentHTML("beforeend",
+    '<div class="modal" id="modal"><div class="modal-card">' +
+      '<div class="modal-head"><div><div class="modal-la">' + esc(t.la) + '</div>' +
+      '<div class="modal-tr">' + esc(t.tr) + " · " + esc(BONES[key].title) + '</div></div>' +
+      '<button class="modal-x" data-act="close3d" aria-label="Закрыть">✕</button></div>' +
+      '<div class="stage3d" id="stage3d"><div class="stage-msg">Загружаем модель…</div></div>' +
+      '<div class="modal-foot">Потяните, чтобы повернуть · колесо или два пальца — масштаб' +
+      '<span class="credit">Z-Anatomy · BodyParts3D, CC BY-SA</span></div>' +
+    "</div></div>");
+  Promise.all([loadThree(), loadBone(key)])
+    .then(([, data]) => build3D(data, labelName))
+    .catch(() => { const m = $("#stage3d"); if (m) m.innerHTML = '<div class="stage-msg">Не удалось загрузить модель — проверьте соединение.</div>'; });
+}
+function build3D(data, labelName) {
+  const host = $("#stage3d"); if (!host) return;
+  host.innerHTML = "";
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches &&
+               document.documentElement.dataset.theme !== "light" ||
+               document.documentElement.dataset.theme === "dark";
+  const W = host.clientWidth, H = host.clientHeight;
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(W, H);
+  host.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, W / H, .01, 100);
+  camera.position.set(0, 0, 2.85);
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(data.positions, 3));
+  geo.setIndex(data.indices);
+  geo.computeVertexNormals();
+  const bone = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
+    color: dark ? 0xd8cbaa : 0xe8dcc2, roughness: .92, metalness: .02, flatShading: false
+  }));
+
+  const group = new THREE.Group();
+  group.add(bone);
+  scene.add(group);
+  scene.add(new THREE.HemisphereLight(dark ? 0x8899aa : 0xffffff, 0x333030, dark ? 1.1 : 1.25));
+  const key = new THREE.DirectionalLight(0xffffff, dark ? .85 : 1.05);
+  key.position.set(1.2, 1.6, 2); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, dark ? .35 : .45);
+  fill.position.set(-1.5, -.6, -1); scene.add(fill);
+
+  // центрируем по габариту, иначе кость уезжает от середины кадра
+  geo.computeBoundingBox();
+  const mid = new THREE.Vector3(); geo.boundingBox.getCenter(mid);
+  geo.translate(-mid.x, -mid.y, -mid.z);
+  // и ставим вертикально: иначе метка на конце разворачивает кость торцом к зрителю
+  geo.computeBoundingBox();
+  const size = new THREE.Vector3(); geo.boundingBox.getSize(size);
+  const long = size.x > size.y && size.x > size.z ? new THREE.Vector3(1, 0, 0)
+             : size.y > size.z ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(0, 0, 1);
+  const upright = new THREE.Quaternion().setFromUnitVectors(long, new THREE.Vector3(0, 1, 0));
+  group.quaternion.copy(upright);
+
+  const mark = data.labels.find(l => l.n === labelName);
+  if (mark) {
+    const p = new THREE.Vector3(mark.p[0], mark.p[1], mark.p[2]).sub(mid);
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(.045, 20, 16),
+      new THREE.MeshBasicMaterial({ color: 0xb02a37 }));
+    dot.position.copy(p);
+    const halo = new THREE.Mesh(new THREE.SphereGeometry(.082, 20, 16),
+      new THREE.MeshBasicMaterial({ color: 0xb02a37, transparent: true, opacity: .22 }));
+    halo.position.copy(p);
+    group.add(dot, halo);
+    // и доворачиваем вокруг вертикали, чтобы отмеченная структура смотрела на зрителя
+    const world = p.clone().applyQuaternion(upright);
+    group.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), -Math.atan2(world.x, world.z));
+  }
+
+  // вращение пальцем и мышью, масштаб колесом и щипком
+  let drag = null, pinch = null;
+  const el3 = renderer.domElement;
+  const rotate = (dx, dy) => {
+    const e = new THREE.Euler(dy * .01, dx * .01, 0, "XYZ");
+    group.quaternion.premultiply(new THREE.Quaternion().setFromEuler(e));
+  };
+  el3.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY }; el3.setPointerCapture(e.pointerId); });
+  el3.addEventListener("pointermove", e => {
+    if (!drag) return;
+    rotate(e.clientX - drag.x, e.clientY - drag.y);
+    drag = { x: e.clientX, y: e.clientY };
+  });
+  el3.addEventListener("pointerup", () => { drag = null; });
+  el3.addEventListener("wheel", e => { e.preventDefault(); zoom(e.deltaY * .0016); }, { passive: false });
+  el3.addEventListener("touchmove", e => {
+    if (e.touches.length !== 2) return;
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    if (pinch) zoom((pinch - d) * .01);
+    pinch = d;
+  }, { passive: true });
+  el3.addEventListener("touchend", () => { pinch = null; });
+  function zoom(d) { camera.position.z = Math.min(6, Math.max(1.6, camera.position.z + d)); }
+
+  let alive = true, t0 = performance.now();
+  (function loop() {
+    if (!alive) return;
+    requestAnimationFrame(loop);
+    const halo = group.children.find(c => c.material && c.material.opacity === .22 || false);
+    if (halo) { const s = 1 + Math.sin((performance.now() - t0) / 420) * .16; halo.scale.setScalar(s); }
+    renderer.render(scene, camera);
+  })();
+  viewer = { stop: () => { alive = false; renderer.dispose(); geo.dispose(); } };
+
+  addEventListener("resize", () => {
+    if (!alive || !host.clientWidth) return;
+    camera.aspect = host.clientWidth / host.clientHeight; camera.updateProjectionMatrix();
+    renderer.setSize(host.clientWidth, host.clientHeight);
+  });
+}
+function close3D() {
+  if (viewer) { viewer.stop(); viewer = null; }
+  const m = $("#modal"); if (m) m.remove();
+}
+
 /* ── события ───────────────────────────────────────── */
 function render() {
   document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.v === state.view));
@@ -659,11 +820,15 @@ document.addEventListener("click", e => {
     case "say-cur": say(state.cur); break;
     case "say-cur-slow": say(state.cur, true); break;
     case "next": nextCard(); render(); break;
+    case "show3d": show3D(t); break;
+    case "close3d": close3D(); break;
     case "rec": toggleRec(t, el); break;
     case "unrec": dropRec(t); break;
   }
 });
+document.addEventListener("click", e => { if (e.target.id === "modal") close3D(); });
 document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && $("#modal")) { close3D(); return; }
   if (state.view !== "drill" || e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
   if (state.answered && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); nextCard(); render(); return; }
   if (!state.answered && state.opts && /^[1-4]$/.test(e.key)) {
