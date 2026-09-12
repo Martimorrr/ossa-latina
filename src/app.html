@@ -120,18 +120,39 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
 .slow:hover{color:var(--accent-ink);border-color:var(--accent)}
 .bone-btn{display:inline-flex;align-items:center;gap:8px;align-self:start;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13.5px;color:var(--accent-ink);font-weight:500}
 .bone-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
-.modal{position:fixed;inset:0;z-index:50;background:rgba(10,14,18,.55);backdrop-filter:blur(3px);display:grid;place-items:center;padding:20px}
-.modal-card{background:var(--raised);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px -20px rgba(0,0,0,.5);width:min(680px,100%);overflow:hidden;display:flex;flex-direction:column}
-.modal-head{display:flex;align-items:flex-start;gap:14px;padding:14px 16px 12px;border-bottom:1px solid var(--line-soft)}
-.modal-la{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.2}
-.modal-tr{font-size:12.5px;color:var(--ink2);margin-top:2px}
-.modal-x{margin-left:auto;width:30px;height:30px;border-radius:50%;color:var(--ink3);font-size:15px;line-height:1}
-.modal-x:hover{background:var(--surface);color:var(--ink)}
-.stage3d{height:min(52vh,400px);position:relative;background:linear-gradient(180deg,var(--surface),var(--ground));touch-action:none;cursor:grab}
-.stage3d:active{cursor:grabbing}
-.stage3d canvas{display:block}
+/* ── атлас скелета ─────────────────────────────────── */
+.atlas{position:relative;height:min(72vh,620px);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  background:radial-gradient(115% 85% at 50% -10%, var(--surface), var(--ground) 72%);touch-action:none;cursor:grab}
+.atlas:active{cursor:grabbing}
+.atlas canvas{display:block}
+.atlas.busy{cursor:progress}
+.atlas-top{position:absolute;left:11px;top:11px;right:11px;display:flex;gap:9px;align-items:flex-start;pointer-events:none}
+.atlas-card{background:color-mix(in srgb,var(--raised) 88%,transparent);backdrop-filter:blur(7px);
+  border:1px solid var(--line-soft);border-radius:9px;padding:7px 12px;box-shadow:var(--shadow);pointer-events:auto;max-width:60%}
+.atlas-la{font-family:var(--serif);font-style:italic;font-size:17.5px;line-height:1.2}
+.atlas-ru{font-size:12px;color:var(--ink2);margin-top:1px}
+.atlas-ru.big{font-size:16px;color:var(--ink);font-weight:500}
+.atlas-back{margin-left:auto;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:9px;
+  background:color-mix(in srgb,var(--raised) 88%,transparent);backdrop-filter:blur(7px);border:1px solid var(--line-soft);
+  box-shadow:var(--shadow);font-size:13px;color:var(--ink2);pointer-events:auto;white-space:nowrap}
+.atlas-back:hover{color:var(--ink);border-color:var(--line)}
+.atlas-foot{position:absolute;left:0;right:0;bottom:0;display:flex;gap:10px;align-items:baseline;padding:20px 13px 9px;
+  font-size:11.5px;color:var(--ink3);pointer-events:none;
+  background:linear-gradient(0deg,color-mix(in srgb,var(--ground) 80%,transparent),transparent)}
+.atlas-tip{position:absolute;z-index:3;padding:4px 9px;border-radius:7px;background:var(--ink);color:var(--ground);
+  font-size:12px;white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,-160%);transition:opacity .13s}
+.atlas-tip.on{opacity:.92}
 .stage-msg{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink3);font-size:13.5px;text-align:center;padding:0 24px}
-.modal-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;padding:10px 16px 12px;font-size:12px;color:var(--ink3);border-top:1px solid var(--line-soft)}
+.struct-list{display:flex;flex-direction:column;gap:1px}
+.struct-list button{display:flex;flex-direction:column;gap:1px;text-align:left;padding:6px 9px;border-radius:6px}
+.struct-list button:hover{background:var(--surface)}
+.struct-list button[aria-current="true"]{background:var(--accent-soft)}
+.struct-list .sl{font-family:var(--serif);font-style:italic;font-size:14.5px;line-height:1.25;color:var(--ink)}
+.struct-list button[aria-current="true"] .sl{color:var(--accent-ink)}
+.struct-list .sr{font-size:12px;color:var(--ink2)}
+.struct-list .nodot{color:var(--ink3)}
+.side-note{font-size:12.5px;color:var(--ink3);line-height:1.5;max-width:34ch}
+.side-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent-ink);padding:4px 0}
 .credit{margin-left:auto;opacity:.75}
 .rule{display:flex;gap:11px;align-items:flex-start;background:var(--surface);border:1px solid var(--line-soft);border-left:3px solid var(--accent);border-radius:0 7px 7px 0;padding:10px 13px}
 .rule .rn{font-family:var(--mono);font-size:12px;color:var(--accent-ink);white-space:nowrap;font-weight:500;padding-top:1px}
@@ -197,6 +218,13 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
   .search{margin-left:0;max-width:none;order:3;width:100%}
   .quiz-term{font-size:27px} .quiz-ru{font-size:21px}
   .card{padding:18px 16px}
+  main.atlas-on #stage{order:1}
+  main.atlas-on aside{order:2}
+  .atlas{height:56vh}
+  .struct-list{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:thin}
+  .struct-list button{flex:none;white-space:nowrap;border:1px solid var(--line);border-radius:10px;padding:5px 11px}
+  .struct-list button[aria-current="true"]{border-color:var(--accent)}
+  .side-note{max-width:none}
 }
 </style>
 
@@ -205,6 +233,7 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
   <nav class="tabs" id="tabs" role="tablist">
     <button role="tab" data-v="ref" aria-selected="true">Справочник</button>
     <button role="tab" data-v="drill" aria-selected="false">Тренировка</button>
+    <button role="tab" data-v="atlas" aria-selected="false">Скелет</button>
     <button role="tab" data-v="rules" aria-selected="false">Правила</button>
   </nav>
   <div class="search">
@@ -252,6 +281,7 @@ const BOX_DAYS = [0, 1, 3, 7, 21];
 
 const state = {
   view: "ref", sec: SECTIONS[0][0], q: "", open: "tuberculum",
+  atlas: { bones: null, side: "r", label: null, term: null },
   mode: "stress", scope: "all",
   cur: null, answered: null, score: { r: 0, w: 0 },
   progress: (() => { try { return JSON.parse(localStorage.getItem("ossa.progress") || "{}"); } catch (e) { return {}; } })(),
@@ -437,8 +467,10 @@ function termHTML(t) {
 function boneRowHTML(t) {
   const link = typeof TERM_3D === "object" && TERM_3D[t.id];
   if (!link) return "";
+  const b = Array.isArray(link[0]) ? link[0] : [link[0]];
+  const nm = b.length === 1 && BONE_NAMES[b[0]];
   return '<button class="bone-btn" data-act="show3d">' + ICON.cube +
-    'Показать на кости — ' + esc(BONES[link[0]].title.toLowerCase()) + '</button>';
+    "Показать на скелете" + (nm ? " — " + esc(nm[1]) : "") + "</button>";
 }
 function recRowHTML(t) {
   const rec = state.recs[t.id];
@@ -637,8 +669,19 @@ async function dropRec(t) {
 }
 
 /* ── 3D: кость и точка структуры ───────────────────── */
+/* ── атлас скелета ─────────────────────────────────────
+   Весь скелет лежит одним мешем: 212 костей в общем буфере, номер кости
+   хранится повершинно в атрибуте aSel, поэтому подсветка и изоляция —
+   это правка одного массива, а не пересборка сцены. Подробная модель
+   выбранной кости подгружается отдельным файлом и встаёт на то же место:
+   координаты у скелета и у костей общие, мировые. */
 const THREE_URL = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-let threeReady = null, viewer = null, meshCache = {};
+let threeReady = null, skel = null, boneFiles = null, AT = null;
+const detailCache = {};
+
+const isDark = () => document.documentElement.dataset.theme === "dark" ||
+  (matchMedia("(prefers-color-scheme: dark)").matches &&
+   document.documentElement.dataset.theme !== "light");
 
 function loadThree() {
   if (window.THREE) return Promise.resolve();
@@ -649,141 +692,525 @@ function loadThree() {
   });
   return threeReady;
 }
-function loadBone(key) {
-  if (meshCache[key]) return Promise.resolve(meshCache[key]);
-  return fetch(BONES[key].file).then(r => r.json()).then(d => (meshCache[key] = d));
+
+function loadSkeleton() {
+  if (skel) return Promise.resolve(skel);
+  return Promise.all([
+    fetch(SKEL_META).then(r => r.json()),
+    fetch(SKEL_BIN).then(r => r.arrayBuffer()),
+    fetch(BONE_DIR + "index.json").then(r => r.json()).catch(() => ({}))
+  ]).then(([meta, buf, files]) => { boneFiles = files; return (skel = decodeSkel(meta, buf)); });
 }
-function show3D(t) {
-  const link = TERM_3D[t.id]; if (!link) return;
-  const [key, labelName] = link;
-  document.body.insertAdjacentHTML("beforeend",
-    '<div class="modal" id="modal"><div class="modal-card">' +
-      '<div class="modal-head"><div><div class="modal-la">' + esc(t.la) + '</div>' +
-      '<div class="modal-tr">' + esc(t.tr) + " · " + esc(BONES[key].title) + '</div></div>' +
-      '<button class="modal-x" data-act="close3d" aria-label="Закрыть">✕</button></div>' +
-      '<div class="stage3d" id="stage3d"><div class="stage-msg">Загружаем модель…</div></div>' +
-      '<div class="modal-foot">Потяните, чтобы повернуть · колесо или два пальца — масштаб' +
-      '<span class="credit">Z-Anatomy · BodyParts3D, CC BY-SA</span></div>' +
-    "</div></div>");
-  Promise.all([loadThree(), loadBone(key)])
-    .then(([, data]) => build3D(data, labelName))
-    .catch(() => { const m = $("#stage3d"); if (m) m.innerHTML = '<div class="stage-msg">Не удалось загрузить модель — проверьте соединение.</div>'; });
+
+/* Позиции лежат Int16-квантованными по общему габариту, индексы — локальные
+   для каждой кости; собираем сквозной Uint32-индекс и нормали на лету. */
+function decodeSkel(meta, buf) {
+  const nv = meta.nv, nt = meta.nt, k = meta.span / 65535;
+  const qp = new Uint16Array(buf, 0, nv * 3);
+  const qi = new Uint16Array(buf, nv * 6, nt * 3);
+  const pos = new Float32Array(nv * 3);
+  for (let i = 0; i < nv; i++) {
+    pos[i * 3]     = meta.lo[0] + qp[i * 3] * k;
+    pos[i * 3 + 1] = meta.lo[1] + qp[i * 3 + 1] * k;
+    pos[i * 3 + 2] = meta.lo[2] + qp[i * 3 + 2] * k;
+  }
+  const idx = new Uint32Array(nt * 3);
+  const part = new Int32Array(nv);
+  meta.parts.forEach((p, pi) => {
+    const io = p.io * 3;
+    for (let i = 0; i < p.nt * 3; i++) idx[io + i] = qi[io + i] + p.vo;
+    for (let i = 0; i < p.nv; i++) part[p.vo + i] = pi;
+  });
+  const nor = new Float32Array(nv * 3);
+  for (let i = 0; i < idx.length; i += 3) {
+    const a = idx[i] * 3, b = idx[i + 1] * 3, c = idx[i + 2] * 3;
+    const e1x = pos[b] - pos[a], e1y = pos[b + 1] - pos[a + 1], e1z = pos[b + 2] - pos[a + 2];
+    const e2x = pos[c] - pos[a], e2y = pos[c + 1] - pos[a + 1], e2z = pos[c + 2] - pos[a + 2];
+    const nx = e1y * e2z - e1z * e2y, ny = e1z * e2x - e1x * e2z, nz = e1x * e2y - e1y * e2x;
+    nor[a] += nx; nor[a + 1] += ny; nor[a + 2] += nz;
+    nor[b] += nx; nor[b + 1] += ny; nor[b + 2] += nz;
+    nor[c] += nx; nor[c + 1] += ny; nor[c + 2] += nz;
+  }
+  // границы треугольников по костям — по ним ищем кость под курсором
+  const tri = meta.parts.map(p => p.io);
+  return { meta, pos, idx, nor, part, tri, sel: new Float32Array(nv) };
 }
-function build3D(data, labelName) {
-  const host = $("#stage3d"); if (!host) return;
-  host.innerHTML = "";
-  const dark = matchMedia("(prefers-color-scheme: dark)").matches &&
-               document.documentElement.dataset.theme !== "light" ||
-               document.documentElement.dataset.theme === "dark";
+
+/* Подробная модель кости: тот же мировой масштаб, плюс точки структур */
+function loadDetail(mesh) {
+  if (detailCache[mesh]) return Promise.resolve(detailCache[mesh]);
+  const f = boneFiles && boneFiles[mesh];
+  if (!f) return Promise.resolve(null);
+  return fetch(BONE_DIR + f).then(r => r.json())
+    .then(d => (detailCache[mesh] = d)).catch(() => null);
+}
+
+const VERT = `
+attribute float aSel;
+varying float vSel;
+varying vec3 vN;
+void main(){
+  vSel = aSel;
+  vN = normalMatrix * normal;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}`;
+const FRAG = `
+uniform vec3 uBone, uHover, uPick;
+uniform float uFocus;
+varying float vSel;
+varying vec3 vN;
+void main(){
+  float a = vSel > 2.5 ? 0.0 : (vSel > 1.5 ? 1.0 : 1.0 - uFocus);
+  if (a < 0.02) discard;
+  vec3 base = vSel > 1.5 ? uPick : (vSel > 0.5 ? uHover : uBone);
+  vec3 n = normalize(vN);
+  float d = max(dot(n, normalize(vec3(0.30, 0.55, 0.78))), 0.0);
+  float f = max(dot(n, normalize(vec3(-0.55, -0.25, -0.5))), 0.0);
+  float rim = pow(1.0 - max(dot(n, vec3(0.0, 0.0, 1.0)), 0.0), 2.5);
+  vec3 col = base * (0.40 + 0.62 * d) + base * 0.20 * f + vec3(0.10) * rim;
+  gl_FragColor = vec4(col, a);
+}`;
+
+const DVERT = `
+varying vec3 vN;
+void main(){
+  vN = normalMatrix * normal;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}`;
+const DFRAG = `
+uniform vec3 uPick;
+varying vec3 vN;
+void main(){
+  vec3 n = normalize(vN);
+  float d = max(dot(n, normalize(vec3(0.30, 0.55, 0.78))), 0.0);
+  float f = max(dot(n, normalize(vec3(-0.55, -0.25, -0.5))), 0.0);
+  float rim = pow(1.0 - max(dot(n, vec3(0.0, 0.0, 1.0)), 0.0), 2.5);
+  gl_FragColor = vec4(uPick * (0.40 + 0.62 * d) + uPick * 0.20 * f + vec3(0.10) * rim, 1.0);
+}`;
+
+function startAtlas() {
+  const host = $("#atlas"); if (!host) return;
+  host.classList.add("busy");
+  Promise.all([loadThree(), loadSkeleton()])
+    .then(() => { host.classList.remove("busy"); buildAtlas(host); atlasUI(); })
+    .catch(() => {
+      host.classList.remove("busy");
+      const m = $("#atlas-msg");
+      if (m) m.textContent = "Не удалось загрузить модель — проверьте соединение.";
+    });
+}
+
+function buildAtlas(host) {
+  const msg = $("#atlas-msg"); if (msg) msg.remove();
+  const dark = isDark();
   const W = host.clientWidth, H = host.clientHeight;
+
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(W, H);
-  host.appendChild(renderer.domElement);
+  host.insertBefore(renderer.domElement, host.firstChild);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(38, W / H, .01, 100);
-  camera.position.set(0, 0, 2.85);
+  const camera = new THREE.PerspectiveCamera(36, W / H, .01, 40);
 
   const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.Float32BufferAttribute(data.positions, 3));
-  geo.setIndex(data.indices);
-  geo.computeVertexNormals();
-  const bone = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
-    color: dark ? 0xd8cbaa : 0xe8dcc2, roughness: .92, metalness: .02, flatShading: false
-  }));
+  geo.setAttribute("position", new THREE.BufferAttribute(skel.pos, 3));
+  geo.setAttribute("normal", new THREE.BufferAttribute(skel.nor, 3));
+  geo.setAttribute("aSel", new THREE.BufferAttribute(skel.sel, 1));
+  geo.setIndex(new THREE.BufferAttribute(skel.idx, 1));
+  geo.computeBoundingBox(); geo.computeBoundingSphere();
 
-  const group = new THREE.Group();
-  group.add(bone);
-  scene.add(group);
-  scene.add(new THREE.HemisphereLight(dark ? 0x8899aa : 0xffffff, 0x333030, dark ? 1.1 : 1.25));
-  const key = new THREE.DirectionalLight(0xffffff, dark ? .85 : 1.05);
-  key.position.set(1.2, 1.6, 2); scene.add(key);
-  const fill = new THREE.DirectionalLight(0xffffff, dark ? .35 : .45);
-  fill.position.set(-1.5, -.6, -1); scene.add(fill);
-
-  // центрируем по габариту, иначе кость уезжает от середины кадра
-  geo.computeBoundingBox();
-  const mid = new THREE.Vector3(); geo.boundingBox.getCenter(mid);
-  geo.translate(-mid.x, -mid.y, -mid.z);
-  // и ставим вертикально: иначе метка на конце разворачивает кость торцом к зрителю
-  geo.computeBoundingBox();
-  const size = new THREE.Vector3(); geo.boundingBox.getSize(size);
-  const long = size.x > size.y && size.x > size.z ? new THREE.Vector3(1, 0, 0)
-             : size.y > size.z ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(0, 0, 1);
-  const upright = new THREE.Quaternion().setFromUnitVectors(long, new THREE.Vector3(0, 1, 0));
-  group.quaternion.copy(upright);
-
-  const mark = data.labels.find(l => l.n === labelName);
-  if (mark) {
-    const p = new THREE.Vector3(mark.p[0], mark.p[1], mark.p[2]).sub(mid);
-    const dot = new THREE.Mesh(new THREE.SphereGeometry(.045, 20, 16),
-      new THREE.MeshBasicMaterial({ color: 0xb02a37 }));
-    dot.position.copy(p);
-    const halo = new THREE.Mesh(new THREE.SphereGeometry(.082, 20, 16),
-      new THREE.MeshBasicMaterial({ color: 0xb02a37, transparent: true, opacity: .22 }));
-    halo.position.copy(p);
-    group.add(dot, halo);
-    // и доворачиваем вокруг вертикали, чтобы отмеченная структура смотрела на зрителя
-    const world = p.clone().applyQuaternion(upright);
-    group.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), -Math.atan2(world.x, world.z));
-  }
-
-  // вращение пальцем и мышью, масштаб колесом и щипком
-  let drag = null, pinch = null;
-  const el3 = renderer.domElement;
-  const rotate = (dx, dy) => {
-    const e = new THREE.Euler(dy * .01, dx * .01, 0, "XYZ");
-    group.quaternion.premultiply(new THREE.Quaternion().setFromEuler(e));
-  };
-  el3.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY }; el3.setPointerCapture(e.pointerId); });
-  el3.addEventListener("pointermove", e => {
-    if (!drag) return;
-    rotate(e.clientX - drag.x, e.clientY - drag.y);
-    drag = { x: e.clientX, y: e.clientY };
+  const mat = new THREE.ShaderMaterial({
+    vertexShader: VERT, fragmentShader: FRAG, transparent: true,
+    uniforms: {
+      uBone:  { value: new THREE.Color(dark ? 0xa79a7e : 0xe0d4ba) },
+      uHover: { value: new THREE.Color(dark ? 0xd8c9a6 : 0xfaf0d8) },
+      uPick:  { value: new THREE.Color(dark ? 0xb8a982 : 0xd9c9a4) },
+      uFocus: { value: 0 }
+    }
   });
-  el3.addEventListener("pointerup", () => { drag = null; });
-  el3.addEventListener("wheel", e => { e.preventDefault(); zoom(e.deltaY * .0016); }, { passive: false });
-  el3.addEventListener("touchmove", e => {
+  const mesh = new THREE.Mesh(geo, mat);
+  scene.add(mesh);
+  const dmat = new THREE.ShaderMaterial({
+    vertexShader: DVERT, fragmentShader: DFRAG,
+    uniforms: { uPick: { value: new THREE.Color(dark ? 0xb8a982 : 0xddcfab) } }
+  });
+
+  // расстояние, с которого габарит целиком попадает в кадр по обеим осям
+  const fit = b => {
+    const sz = b.getSize(new THREE.Vector3());
+    const t = Math.tan(camera.fov * Math.PI / 360);
+    return Math.max(sz.y / 2 / t, sz.x / 2 / t / camera.aspect, sz.z / 2 / t) * 1.14;
+  };
+  const box = geo.boundingBox.clone();
+  const home = box.getCenter(new THREE.Vector3());
+  const homeR = fit(box);
+
+  // орбитальная камера: текущее значение догоняет целевое, отсюда плавные подлёты
+  const cam = { th: 0, ph: .06, r: homeR, tgt: home.clone(),
+                Th: 0, Ph: .06, R: homeR, Tgt: home.clone(), snap: true };
+  const place = () => {
+    const cp = Math.cos(cam.ph);
+    camera.position.set(cam.tgt.x + cam.r * cp * Math.sin(cam.th),
+                        cam.tgt.y + cam.r * Math.sin(cam.ph),
+                        cam.tgt.z + cam.r * cp * Math.cos(cam.th));
+    camera.lookAt(cam.tgt);
+  };
+  place();
+
+  /* маркер выбранной структуры */
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 16),
+    new THREE.MeshBasicMaterial({ color: 0xb02a37 }));
+  const halo = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 16),
+    new THREE.MeshBasicMaterial({ color: 0xb02a37, transparent: true, opacity: .2 }));
+  dot.visible = halo.visible = false;
+  scene.add(dot, halo);
+
+  let detail = null;           // подробная модель выбранной кости
+  let hover = -1, drag = null, moved = 0, pinch = null;
+  const ray = new THREE.Raycaster();
+  const A = {
+    picked: [],                // индексы частей в изоляции
+    focusTo: 0,
+    stop: null, select: null, focus: null, reset: null, hoverAt: null
+  };
+
+  const dropDetail = () => {
+    if (!detail) return;
+    scene.remove(detail); detail.geometry.dispose(); detail = null;
+  };
+  const setSel = (list, v) => {
+    for (const pi of list) {
+      const p = skel.meta.parts[pi];
+      skel.sel.fill(v, p.vo, p.vo + p.nv);
+    }
+    geo.attributes.aSel.needsUpdate = true;
+  };
+  const partsOf = (names, side) => {
+    const want = new Set(names);
+    const one = names.length === 1;
+    return skel.meta.parts.reduce((acc, p, i) => {
+      if (want.has(p.n) && !(one && side && p.s && p.s !== side)) acc.push(i);
+      return acc;
+    }, []);
+  };
+  const boxOf = list => {
+    const b = new THREE.Box3();
+    const v = new THREE.Vector3();
+    for (const pi of list) {
+      const p = skel.meta.parts[pi];
+      for (let i = p.vo; i < p.vo + p.nv; i++)
+        b.expandByPoint(v.set(skel.pos[i * 3], skel.pos[i * 3 + 1], skel.pos[i * 3 + 2]));
+    }
+    return b;
+  };
+
+  A.select = (names, side) => {
+    // у теменной и трапеции разметка есть только с одной стороны — берём её
+    if (names.length === 1 && side && boneFiles) {
+      const has = x => boneFiles[names[0] + (x ? "." + x : "")];
+      const other = side === "r" ? "l" : "r";
+      if (!has(side) && has(other)) { side = other; state.atlas.side = other; }
+    }
+    const list = partsOf(names, side);
+    if (!list.length) return;
+    skel.sel.fill(0);
+    setSel(list, 2);
+    hover = -1;
+    A.picked = list;
+    A.focusTo = 1;
+    const b = boxOf(list);
+    cam.Tgt = b.getCenter(new THREE.Vector3());
+    cam.R = Math.max(fit(b), .04);
+    dot.visible = halo.visible = false;
+    dropDetail();
+    // подробная модель — только когда выбрана одна кость
+    if (names.length === 1) {
+      const p = skel.meta.parts[list[0]];
+      const key = p.n + (p.s ? "." + p.s : "");
+      loadDetail(key).then(d => {
+        if (!d || A.picked !== list) return;
+        const g = new THREE.BufferGeometry();
+        g.setAttribute("position", new THREE.Float32BufferAttribute(d.positions, 3));
+        g.setIndex(d.indices);
+        g.computeVertexNormals();
+        detail = new THREE.Mesh(g, dmat);
+        detail.userData.labels = d.labels;
+        scene.add(detail);
+        setSel(list, 3);           // грубую версию убираем, её заменила подробная
+        if (state.atlas.label) A.focus(state.atlas.label);
+      });
+    }
+  };
+
+  A.focus = name => {
+    const labs = detail && detail.userData.labels;
+    const m = labs && labs.find(l => l.n === name);
+    if (!m) { dot.visible = halo.visible = false; return; }
+    const p = new THREE.Vector3(m.p[0], m.p[1], m.p[2]);
+    const b = boxOf(A.picked);
+    const size = b.getSize(new THREE.Vector3()).length();
+    const s = Math.max(size * .016, .0015);
+    dot.position.copy(p); dot.scale.setScalar(s);
+    halo.position.copy(p); halo.scale.setScalar(s * 1.9);
+    dot.visible = halo.visible = true;
+    // разворачиваем кость точкой к зрителю и подлетаем ближе
+    const d = p.clone().sub(b.getCenter(new THREE.Vector3()));
+    if (d.lengthSq() > 1e-9) {
+      d.normalize();
+      cam.Th = Math.atan2(d.x, d.z);
+      cam.Ph = Math.max(-.9, Math.min(.9, Math.asin(d.y) * .55));
+    }
+    cam.Tgt = p.clone().lerp(b.getCenter(new THREE.Vector3()), .35);
+    cam.R = Math.max(fit(b) * .72, .035);
+  };
+
+  A.reset = () => {
+    skel.sel.fill(0);
+    geo.attributes.aSel.needsUpdate = true;
+    hover = -1;
+    A.picked = []; A.focusTo = 0;
+    dot.visible = halo.visible = false;
+    dropDetail();
+    cam.Tgt = home.clone(); cam.R = homeR; cam.Th = 0; cam.Ph = .06;
+  };
+
+  /* ── указатель: наведение подсвечивает, короткий тап выбирает ── */
+  const tip = $("#atlas-tip");
+
+  const hit = (cx, cy) => {
+    const r = renderer.domElement.getBoundingClientRect();
+    ray.setFromCamera(new THREE.Vector2(
+      ((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1), camera);
+    const h = ray.intersectObject(mesh, false)[0];
+    if (!h) return -1;
+    const t = h.faceIndex, tri = skel.tri;
+    let lo = 0, hi = tri.length - 1;
+    while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (tri[mid] <= t) lo = mid; else hi = mid - 1; }
+    return lo;
+  };
+  const setHover = (pi, cx, cy) => {
+    if (pi !== hover) {
+      if (hover >= 0 && skel.sel[skel.meta.parts[hover].vo] === 1) setSel([hover], 0);
+      hover = pi;
+      if (pi >= 0 && skel.sel[skel.meta.parts[pi].vo] === 0) setSel([pi], 1);
+    }
+    if (pi >= 0 && tip) {
+      const p = skel.meta.parts[pi], nm = BONE_NAMES[p.n];
+      const r = host.getBoundingClientRect();
+      tip.textContent = (nm ? nm[1] : p.n) + (p.s ? (p.s === "r" ? ", правая" : ", левая") : "");
+      tip.style.left = (cx - r.left) + "px";
+      tip.style.top = (cy - r.top) + "px";
+      tip.classList.add("on");
+    } else if (tip) tip.classList.remove("on");
+  };
+
+  const el = renderer.domElement;
+  el.addEventListener("pointerdown", e => {
+    drag = { x: e.clientX, y: e.clientY }; moved = 0;
+    el.setPointerCapture(e.pointerId);
+  });
+  el.addEventListener("pointermove", e => {
+    if (drag) {
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      moved += Math.abs(dx) + Math.abs(dy);
+      cam.Th = cam.th -= dx * .008;
+      cam.Ph = cam.ph = Math.max(-1.35, Math.min(1.35, cam.ph - dy * .008));
+      drag = { x: e.clientX, y: e.clientY };
+      if (tip) tip.classList.remove("on");
+      return;
+    }
+    if (e.pointerType !== "mouse" || A.focusTo) return;
+    const now = performance.now();
+    if (now - (A.hoverAt || 0) < 80) return;
+    A.hoverAt = now;
+    setHover(hit(e.clientX, e.clientY), e.clientX, e.clientY);
+  });
+  el.addEventListener("pointerup", e => {
+    const wasDrag = moved > 6;
+    drag = null;
+    if (wasDrag || A.focusTo) return;
+    const pi = hit(e.clientX, e.clientY);
+    if (pi < 0) return;
+    const p = skel.meta.parts[pi];
+    state.atlas = { bones: [p.n], side: p.s || "", label: null, term: null };
+    A.select([p.n], p.s);
+    if (tip) tip.classList.remove("on");
+    atlasUI();
+  });
+  el.addEventListener("pointerleave", () => { if (tip) tip.classList.remove("on"); setHover(-1); });
+  el.addEventListener("wheel", e => { e.preventDefault(); zoom(1 + e.deltaY * .0012); }, { passive: false });
+  el.addEventListener("touchmove", e => {
     if (e.touches.length !== 2) return;
-    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    if (pinch) zoom((pinch - d) * .01);
+    drag = null;                       // двумя пальцами только масштабируем
+
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                         e.touches[0].clientY - e.touches[1].clientY);
+    if (pinch) zoom(pinch / d);
     pinch = d;
   }, { passive: true });
-  el3.addEventListener("touchend", () => { pinch = null; });
-  function zoom(d) { camera.position.z = Math.min(6, Math.max(1.6, camera.position.z + d)); }
+  el.addEventListener("touchend", () => { pinch = null; });
+  function zoom(f) { cam.R = cam.r = Math.max(.03, Math.min(homeR * 1.6, cam.r * f)); }
 
   let alive = true, t0 = performance.now();
   (function loop() {
     if (!alive) return;
     requestAnimationFrame(loop);
-    const halo = group.children.find(c => c.material && c.material.opacity === .22 || false);
-    if (halo) { const s = 1 + Math.sin((performance.now() - t0) / 420) * .16; halo.scale.setScalar(s); }
+    const e = .12;
+    cam.th += (cam.Th - cam.th) * e;
+    cam.ph += (cam.Ph - cam.ph) * e;
+    cam.r  += (cam.R  - cam.r)  * e;
+    cam.tgt.lerp(cam.Tgt, e);
+    mat.uniforms.uFocus.value += (A.focusTo - mat.uniforms.uFocus.value) * .09;
+    place();
+    if (halo.visible) halo.scale.setScalar(dot.scale.x * (1.75 + Math.sin((performance.now() - t0) / 380) * .3));
     renderer.render(scene, camera);
   })();
-  viewer = { stop: () => { alive = false; renderer.dispose(); geo.dispose(); } };
 
-  addEventListener("resize", () => {
+  const onResize = () => {
     if (!alive || !host.clientWidth) return;
-    camera.aspect = host.clientWidth / host.clientHeight; camera.updateProjectionMatrix();
+    camera.aspect = host.clientWidth / host.clientHeight;
+    camera.updateProjectionMatrix();
     renderer.setSize(host.clientWidth, host.clientHeight);
+    if (!A.picked.length) cam.R = fit(box);
+  };
+  addEventListener("resize", onResize);
+  A.stop = () => {
+    alive = false;
+    removeEventListener("resize", onResize);
+    if (detail) detail.geometry.dispose();
+    geo.dispose(); mat.dispose(); dmat.dispose(); renderer.dispose();
+  };
+
+  AT = A;
+  // восстанавливаем выбор, если на вкладку пришли из справочника
+  if (state.atlas.bones) A.select(state.atlas.bones, state.atlas.side);
+}
+
+function stopAtlas() { if (AT) { AT.stop(); AT = null; } }
+
+/* Термины, привязанные ровно к этой кости — они и составляют список структур */
+function structsOf(bone) {
+  return DATA.filter(t => {
+    const l = TERM_3D[t.id]; if (!l) return false;
+    const b = Array.isArray(l[0]) ? l[0] : [l[0]];
+    return b.length === 1 && b[0] === bone;
   });
 }
-function close3D() {
-  if (viewer) { viewer.stop(); viewer = null; }
-  const m = $("#modal"); if (m) m.remove();
+
+function renderAtlas() {
+  if (!$("#atlas")) {
+    $("#stage").innerHTML =
+      '<div class="atlas" id="atlas">' +
+        '<div class="stage-msg" id="atlas-msg">Загружаем скелет…</div>' +
+        '<div class="atlas-top" id="atlas-top"></div>' +
+        '<div class="atlas-foot"><span id="atlas-hint"></span>' +
+          '<span class="credit">Z-Anatomy · BodyParts3D, CC BY-SA</span></div>' +
+        '<div class="atlas-tip" id="atlas-tip"></div>' +
+      "</div>";
+    startAtlas();
+  }
+  atlasUI();
+}
+
+/* Оверлей и боковая панель: обновляются без пересборки сцены */
+function atlasUI() {
+  const a = state.atlas, top = $("#atlas-top"), hint = $("#atlas-hint");
+  if (!top) return;
+  const one = a.bones && a.bones.length === 1 ? a.bones[0] : null;
+  const nm = one && BONE_NAMES[one];
+  // в шапке — то, что сейчас рассматривают: структура, если выбрана, иначе кость
+  const tt = a.term && BY_ID[a.term];
+  const la = tt ? tt.la : (nm ? nm[0] : a.title);
+  const ru = tt ? tt.tr + (nm ? " · " + nm[1] : "") : (nm ? nm[1] : a.title2);
+  top.innerHTML = a.bones
+    ? '<div class="atlas-card">' +
+        (la ? '<div class="atlas-la">' + esc(la) + "</div>" : "") +
+        '<div class="atlas-ru' + (la ? "" : " big") + '">' + esc(ru || "") +
+        (one && a.side ? (a.side === "r" ? " · правая" : " · левая") : "") + "</div></div>" +
+      '<button class="atlas-back" data-act="atlas-back">← весь скелет</button>'
+    : "";
+  if (hint) hint.textContent = a.bones
+    ? "Потяните, чтобы повернуть · колесо или два пальца — масштаб"
+    : "Нажмите кость, чтобы рассмотреть её отдельно";
+
+  const side = $("#side");
+  if (!side) return;
+  if (!a.bones) {
+    side.innerHTML = '<div><div class="side-h">Области</div><div class="sec-list">' +
+      ATLAS_AREAS.map(([k, ru]) => '<button data-area="' + k + '">' + esc(ru) + "</button>").join("") +
+      '</div></div><div class="side-note">Или нажмите любую кость прямо на модели — ' +
+      'скелет уйдёт, останется она одна.</div>';
+    return;
+  }
+  const back = "<div>";
+  if (!one) {
+    // выбрана область — даём выбрать в ней кость
+    const seen = [];
+    a.bones.forEach(b => { if (!seen.includes(b)) seen.push(b); });
+    side.innerHTML = back +
+      '<div class="side-h" style="margin-top:10px">Кости области</div><div class="struct-list">' +
+      seen.map(b => {
+        const n = BONE_NAMES[b];
+        return '<button data-bone="' + esc(b) + '"><span class="sl">' + esc(n ? n[0] : b) +
+          '</span><span class="sr">' + esc(n ? n[1] : "") + "</span></button>";
+      }).join("") + "</div></div>";
+    return;
+  }
+  const list = structsOf(one);
+  side.innerHTML = back +
+    (list.length
+      ? '<div class="side-h" style="margin-top:10px">Структуры</div><div class="struct-list">' +
+        list.map(t => {
+          const lab = TERM_3D[t.id][1];
+          return '<button data-struct="' + t.id + '" aria-current="' + (a.term === t.id) + '">' +
+            '<span class="sl">' + esc(t.la) + "</span>" +
+            '<span class="sr' + (lab ? "" : " nodot") + '">' + esc(t.tr) +
+            (lab ? "" : " · не размечена") + "</span></button>";
+        }).join("") + "</div>"
+      : '<div class="side-note" style="margin-top:10px">Для этой кости в базе пока нет терминов.</div>') +
+    "</div>";
+}
+
+const ATLAS_AREAS = [
+  ["cranium", "Череп"], ["spineAll", "Позвоночник"],
+  ["thoraxAll", "Грудная клетка"], ["shoulderG", "Пояс верхней конечности"],
+  ["armG", "Рука"], ["pelvisG", "Таз"], ["legG", "Нога"]
+];
+function areaBones(k) {
+  if (k === "thoraxAll") return G.ribsTrue.concat(G.ribsFalse, G.sternum);
+  if (k === "shoulderG") return ["Clavicle", "Scapula"];
+  if (k === "armG") return ["Humerus", "Radius", "Ulna"].concat(G.carpus, G.metacarpus, G.phalHand);
+  if (k === "pelvisG") return ["Hip bone", "Sacrum", "Coccyx"];
+  if (k === "legG") return ["Femur", "Patella", "Tibia", "Fibula"].concat(G.tarsus, G.metatarsus, G.phalFoot);
+  return G[k];
+}
+
+/* Переход из справочника: открыть вкладку и сразу навести на структуру */
+function showOnSkeleton(t) {
+  const link = TERM_3D[t.id]; if (!link) return;
+  const bones = Array.isArray(link[0]) ? link[0] : [link[0]];
+  state.atlas = { bones, side: "r", label: link[1], term: t.id,
+                  title: t.la, title2: t.tr };
+  state.view = "atlas";
+  render();
+  if (AT) { AT.select(bones, "r"); atlasUI(); }
 }
 
 /* ── события ───────────────────────────────────────── */
 function render() {
   document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.v === state.view));
+  const mainEl = document.querySelector("main");
+  if (state.view !== "atlas") stopAtlas();
+  mainEl.classList.toggle("atlas-on", state.view === "atlas");
+  if (state.view === "atlas") { renderAtlas(); return; }   // атлас сам рисует обе колонки
   renderSide();
   if (state.view === "ref") renderRef();
   else if (state.view === "drill") renderDrill();
   else renderRules();
 }
 document.addEventListener("click", e => {
-  const el = e.target.closest("[data-v],[data-sec],[data-mode],[data-opt],[data-syl],[data-act]");
+  const el = e.target.closest("[data-v],[data-sec],[data-mode],[data-opt],[data-syl],[data-act],[data-area],[data-struct],[data-bone]");
   if (!el) return;
   const art = e.target.closest(".term"), t = art ? BY_ID[art.dataset.id] : null;
   if (el.dataset.v) { state.view = el.dataset.v; if (state.view === "drill" && !state.cur) nextCard(true); render(); return; }
@@ -793,6 +1220,28 @@ document.addEventListener("click", e => {
     render(); return;
   }
   if (el.dataset.mode) { state.mode = el.dataset.mode; state.cur = null; nextCard(true); render(); return; }
+  if (el.dataset.area) {
+    const bones = areaBones(el.dataset.area);
+    state.atlas = { bones, side: "r", label: null, term: null,
+                    title: "", title2: el.textContent };
+    if (AT) AT.select(bones, "r");
+    atlasUI(); return;
+  }
+  if (el.dataset.bone) {
+    const b = el.dataset.bone;
+    state.atlas = { bones: [b], side: state.atlas.side || "r", label: null, term: null };
+    if (AT) AT.select([b], state.atlas.side);
+    atlasUI(); return;
+  }
+  if (el.dataset.struct) {
+    const t2 = BY_ID[el.dataset.struct], link = TERM_3D[t2.id];
+    state.atlas.term = t2.id;
+    state.atlas.label = link[1];
+    if (AT && link[1]) AT.focus(link[1]);
+    atlasUI();
+    say(t2);                 // нажал название — сразу слышит, как оно звучит
+    return;
+  }
   if (el.dataset.opt) { if (!state.answered) answer(el.dataset.opt === state.cur.id, el.dataset.opt); return; }
   if (el.dataset.syl != null) {
     if (state.answered) return;
@@ -807,15 +1256,21 @@ document.addEventListener("click", e => {
     case "say-cur": say(state.cur); break;
     case "say-cur-slow": say(state.cur, true); break;
     case "next": nextCard(); render(); break;
-    case "show3d": show3D(t); break;
-    case "close3d": close3D(); break;
+    case "show3d": showOnSkeleton(t); break;
+    case "atlas-back":
+      state.atlas = { bones: null, side: "r", label: null, term: null };
+      if (AT) AT.reset();
+      atlasUI(); break;
     case "rec": toggleRec(t, el); break;
     case "unrec": dropRec(t); break;
   }
 });
-document.addEventListener("click", e => { if (e.target.id === "modal") close3D(); });
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && $("#modal")) { close3D(); return; }
+  if (e.key === "Escape" && state.view === "atlas" && state.atlas.bones) {
+    state.atlas = { bones: null, side: "r", label: null, term: null };
+    if (AT) AT.reset();
+    atlasUI(); return;
+  }
   if (state.view !== "drill" || e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
   if (state.answered && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); nextCard(); render(); return; }
   if (!state.answered && state.opts && /^[1-4]$/.test(e.key)) {
