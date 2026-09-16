@@ -17,7 +17,16 @@ for (const [mesh, file] of Object.entries(idx)) {
   d.labels.forEach(l => labels[base].add(l.n));
 }
 
+// каждый id карты должен существовать в базе терминов
+const src = fs.readFileSync(path.join(root, 'terms.js'), 'utf8');
+const TERMS = eval(src + ';TERMS');
+const bareId = x => x.replace(/·/g, '').normalize('NFD').replace(/[\u0304\u0306\u0301]/g, '')
+  .normalize('NFC').toLowerCase().replace(/\s+/g, '-');
+const known = new Set(TERMS.map(t => bareId(t[0])));
+
 let bad = 0;
+for (const id of Object.keys(M.TERM_3D))
+  if (!known.has(id)) { console.log(`✗ id "${id}" нет в terms.js`); bad++; }
 const missName = [];
 for (const m of meshes) if (!M.BONE_NAMES[m]) missName.push(m);
 if (missName.length) { console.log('БЕЗ РУССКОГО НАЗВАНИЯ:', missName.join(', ')); bad += missName.length; }

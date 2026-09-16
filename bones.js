@@ -368,6 +368,53 @@ const TERM_3D = {
   "pelvis-minor":         [["Hip bone", "Sacrum", "Coccyx"], null],
   "angulus-subpubicus":   ["Hip bone", "Inferior pubic ramus"],
 
+  /* ─ строение позвонка (на примере III поясничного) ─ */
+  "pediculus-arcus-vertebrae":   ["Vertebra L3", "Pedicle of vertebral arch"],
+  "lamina-arcus-vertebrae":      ["Vertebra L3", "Lamina of vertebral arch"],
+  "incisura-vertebralis-superior": ["Vertebra L3", "Superior vertebral notch"],
+  "incisura-vertebralis-inferior": ["Vertebra L3", "Inferior vertebral notch"],
+  "processus-articularis-superior": ["Vertebra L3", "Superior articular process of vertebra"],
+  "processus-articularis-inferior": ["Vertebra L3", "Inferior articular facet of vertebra"],
+  "processus-costalis":          ["Vertebra L3", "Costal part of transverse process"],
+
+  /* ─ атлант и осевой ─ */
+  "arcus-anterior":              ["Atlas (C1)", "Anterior arch of atlas"],
+  "arcus-posterior":             ["Atlas (C1)", "Posterior arch of atlas"],
+  "massa-lateralis":             ["Atlas (C1)", "Lateral mass"],
+  "fovea-dentis":                ["Atlas (C1)", "Facet for dens"],
+  "sulcus-arteriae-vertebralis": ["Atlas (C1)", "Groove for vertebral artery"],
+  "facies-articularis-superior": ["Atlas (C1)", "Superior articular surface of atlas"],
+  "facies-articularis-inferior": ["Atlas (C1)", "Inferior articular surface of atlas"],
+  "apex-dentis":                 ["Axis (C2)", "Apex of dens axis"],
+  "facies-articularis-anterior": ["Axis (C2)", "Anterior articular facet of dens axis"],
+  "facies-articularis-posterior":["Axis (C2)", "Posterior articular facet of dens axis"],
+
+  /* ─ крестец и копчик ─ */
+  "basis-ossis-sacri":           ["Sacrum", "Base of sacrum"],
+  "apex-ossis-sacri":            ["Sacrum", "Apex of sacrum"],
+  "ala-ossis-sacri":             ["Sacrum", "Ala of sacrum"],
+  "facies-pelvina":              ["Sacrum", "Pelvic surface of sacrum"],
+  "facies-dorsalis":             ["Sacrum", "Dorsal surface of sacrum"],
+  "lineae-transversae":          ["Sacrum", "Transverse ridges"],
+  "foramina-sacralia-anteriora": ["Sacrum", "Anterior sacral foramina"],
+  "foramina-sacralia-posteriora":["Sacrum", "Posterior sacral foramina"],
+  "pars-lateralis":              ["Sacrum", "Lateral part of sacrum"],
+  "facies-auricularis":          ["Sacrum", "Auricular surface of sacrum"],
+  "tuberositas-sacralis":        ["Sacrum", "Sacral tuberosity"],
+  "crista-sacralis-intermedia":  ["Sacrum", "Intermediate sacral crest"],
+  "crista-sacralis-lateralis":   ["Sacrum", "Lateral sacral crest"],
+  "cornu-sacrale":               ["Sacrum", "Sacral horn"],
+  "cornu-coccygeum":             ["Coccyx", "Coccygeal horn"],
+
+  /* ─ ребро и грудина ─ */
+  "corpus-costae":               ["Sixth rib", "Body of rib"],
+  "crista-capitis-costae":       ["Sixth rib", "Crest of head of rib"],
+  "crista-colli-costae":         ["Sixth rib", "Crest of neck of rib"],
+  "facies-articularis-capitis-costae":   ["Sixth rib", "Articular facets of head of rib"],
+  "facies-articularis-tuberculi-costae": ["Sixth rib", "Articular facet of tubercle of rib"],
+  "incisura-clavicularis":       ["Manubrium of sternum", "Clavicular notch"],
+  "incisurae-costales":          ["Body of sternum", "Costal notches"],
+
   /* ─ свободная нижняя конечность ─ */
   "femur":                ["Femur", "Femur"],
   "caput-femoris":        ["Femur", "Head of femur"],

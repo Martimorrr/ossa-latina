@@ -166,6 +166,7 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
 .side-note{font-size:12.5px;color:var(--ink3);line-height:1.5;max-width:34ch}
 .side-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent-ink);padding:4px 0}
 .credit{margin-left:auto;opacity:.75}
+.note{margin:0;font-size:14px;line-height:1.6;color:var(--ink2);max-width:64ch;border-left:3px solid var(--bone-line);padding-left:12px}
 .rule{display:flex;gap:11px;align-items:flex-start;background:var(--surface);border:1px solid var(--line-soft);border-left:3px solid var(--accent);border-radius:0 7px 7px 0;padding:10px 13px}
 .rule .rn{font-family:var(--mono);font-size:12px;color:var(--accent-ink);white-space:nowrap;font-weight:500;padding-top:1px}
 .rule p{margin:0;font-size:13.5px;color:var(--ink2);max-width:62ch}
@@ -275,7 +276,7 @@ const VOW = /[аеёиоуыэюя]/;
 /* ── модель ────────────────────────────────────────── */
 function accent(s) { const m = s.match(VOW); return m ? s.slice(0, m.index + 1) + "\u0301" + s.slice(m.index + 1) : s; }
 
-const DATA = TERMS.map(([laRaw, ruRaw, tr, rule, sec]) => {
+const DATA = TERMS.map(([laRaw, ruRaw, tr, rule, sec, note]) => {
   const lw = laRaw.split(" "), rw = ruRaw.split(" "), syls = [];
   lw.forEach((w, wi) => w.split("·").forEach((s, si) => syls.push({
     la: s, ru: rw[wi].split("·")[si], w: wi,
@@ -285,7 +286,7 @@ const DATA = TERMS.map(([laRaw, ruRaw, tr, rule, sec]) => {
   let say = "", cw = 0;
   syls.forEach(s => { if (s.w !== cw) { say += " "; cw = s.w; } say += s.stress ? accent(s.ru.toLowerCase()) : s.ru.toLowerCase(); });
   const la = bare(laRaw.replace(/·/g, "")).toLowerCase();
-  return { id: la.replace(/\s+/g, "-"), la, tr, rule, sec, syls, say,
+  return { id: la.replace(/\s+/g, "-"), la, tr, rule, sec, syls, say, note,
            single: syls.filter(s => s.stress).length === 1,
            hay: (la + " " + tr).toLowerCase() };
 });
@@ -455,6 +456,9 @@ function sayHTML(t) {
   return '<div class="say"><span class="lab">читается</span>' + body +
     '<button class="slow" data-act="say-slow">медленно</button></div>';
 }
+function noteHTML(t) {
+  return t.note ? '<p class="note">' + esc(t.note) + "</p>" : "";
+}
 function ruleHTML(t) {
   const r = RULES[t.rule];
   return '<div class="rule"><span class="rn">' + esc(r[0]) + "</span><p>" + esc(r[1]) + "</p></div>";
@@ -474,7 +478,7 @@ function termHTML(t) {
       '<span class="term-tools">' +
         '<button class="icon-btn' + (rec ? " has-rec" : "") + '" data-act="say" title="Прослушать">' + ICON.play + '</button>' +
       '</span></div>' +
-    (open ? '<div class="body">' + scanHTML(t) + sayHTML(t) + ruleHTML(t) + boneRowHTML(t) + recRowHTML(t) + '</div>' : "") +
+    (open ? '<div class="body">' + scanHTML(t) + sayHTML(t) + noteHTML(t) + ruleHTML(t) + boneRowHTML(t) + recRowHTML(t) + '</div>' : "") +
   "</article>";
 }
 function boneRowHTML(t) {
