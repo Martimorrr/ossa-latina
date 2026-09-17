@@ -70,6 +70,7 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
 .sec-list{display:flex;flex-direction:column;gap:1px}
 .sec-list button{display:flex;justify-content:space-between;align-items:baseline;gap:8px;text-align:left;padding:6px 9px;border-radius:6px;font-size:13.5px;color:var(--ink2)}
 .sec-list button:hover{background:var(--surface)}
+.sec-group{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin:9px 0 3px;padding-left:9px;font-weight:500}
 .sec-list button[aria-current="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:500}
 .sec-list .n{font-family:var(--mono);font-size:11px;color:var(--ink3);font-variant-numeric:tabular-nums}
 .sec-list button[aria-current="true"] .n{color:var(--accent-ink)}
@@ -214,6 +215,7 @@ aside{position:sticky;top:74px;align-self:start;display:flex;flex-direction:colu
   aside{position:static;flex-direction:column}
   .sec-list{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:thin}
   .sec-list button{white-space:nowrap;border:1px solid var(--line);border-radius:18px;padding:5px 12px}
+  .sec-group{display:none}
   .prog{border-top:none;padding-top:0}
   .brand span{display:none}
   .search{margin-left:0;max-width:none;order:3;width:100%}
@@ -501,11 +503,17 @@ function renderSide() {
   if (state.view === "rules") { $("#side").innerHTML = progHTML(); return; }
   const drill = state.view === "drill", cur = drill ? state.scope : state.sec;
   const counts = {}; DATA.forEach(t => counts[t.sec] = (counts[t.sec] || 0) + 1);
-  const rows = [["all", drill ? "Всё сразу" : "Все разделы", DATA.length]]
-    .concat(SECTIONS.map(s => [s[0], s[1], counts[s[0]] || 0]));
-  $("#side").innerHTML = '<div><div class="side-h">' + (drill ? "Что тренируем" : "Разделы") + '</div><div class="sec-list">' +
-    rows.map(r => '<button data-sec="' + r[0] + '" aria-current="' + (cur === r[0]) + '"><span>' + esc(r[1]) + '</span><span class="n">' + r[2] + "</span></button>").join("") +
-    "</div></div>" + progHTML();
+  const btn = (id, name, n) => '<button data-sec="' + id + '" aria-current="' + (cur === id) +
+    '"><span>' + esc(name) + '</span><span class="n">' + n + "</span></button>";
+  // разделов много, поэтому череп, туловище и конечности идут своими группами
+  let html = btn("all", drill ? "Всё сразу" : "Все разделы", DATA.length), group = "";
+  SECTIONS.forEach(s => {
+    const g = s[3] || "";
+    if (g !== group) { html += g ? '<div class="sec-group">' + esc(g) + "</div>" : ""; group = g; }
+    html += btn(s[0], s[1], counts[s[0]] || 0);
+  });
+  $("#side").innerHTML = '<div><div class="side-h">' + (drill ? "Что тренируем" : "Разделы") +
+    '</div><div class="sec-list">' + html + "</div></div>" + progHTML();
 }
 function progHTML() {
   let learned = 0, work = 0;
