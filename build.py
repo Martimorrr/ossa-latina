@@ -11,7 +11,7 @@ src = pathlib.Path("src/app.html").read_text(encoding="utf-8")
 i = src.index("<header")                      # всё до разметки — в head, остальное — в body
 head, body = src[:i], src[i:]
 
-DESC = "Ударение в латинской остеологической номенклатуре: 750 терминов со слогоделением, транскрипцией, озвучкой и тренажёром"
+DESC = "Ударение в латинской остеологической номенклатуре: 882 термина со слогоделением, транскрипцией, озвучкой и тренажёром"
 FAVICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦴</text></svg>"
 
 doc = f"""<!doctype html>
