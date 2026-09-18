@@ -311,8 +311,8 @@ const TERM_3D = {
   "fossa-infraspinata":   ["Scapula", "Infraspinous fossa"],
   "fossa-subscapularis":  ["Scapula", "Subscapular fossa"],
   "collum-scapulae":      ["Scapula", "Neck of scapula"],
-  "margo-medialis":       ["Scapula", "Medial border of scapula"],
-  "margo-lateralis":      ["Scapula", "Lateral border of scapula"],
+  "margo-medialis-scapulae": ["Scapula", "Medial border of scapula"],
+  "margo-lateralis-scapulae": ["Scapula", "Lateral border of scapula"],
   "angulus-inferior":     ["Scapula", "Inferior angle of scapula"],
 
   /* ─ свободная верхняя конечность ─ */
