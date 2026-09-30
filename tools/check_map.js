@@ -8,13 +8,13 @@ const skel = JSON.parse(fs.readFileSync(path.join(root, 'bones/skeleton.json')))
 const meshes = new Set(skel.parts.map(p => p.n));
 const idx = JSON.parse(fs.readFileSync(path.join(root, 'bones/index.json')));
 
-// метки по базовому имени кости
+// метки по базовому имени кости — лежат одним файлом на весь атлас
+const LAB = JSON.parse(fs.readFileSync(path.join(root, 'bones/labels.json')));
 const labels = {};
-for (const [mesh, file] of Object.entries(idx)) {
+for (const mesh of Object.keys(idx)) {
   const base = /\.[lr]$/.test(mesh) ? mesh.slice(0, -2) : mesh;
-  const d = JSON.parse(fs.readFileSync(path.join(root, 'bones', file)));
   labels[base] = labels[base] || new Set();
-  d.labels.forEach(l => labels[base].add(l.n));
+  (LAB[mesh] || []).forEach(l => labels[base].add(l.n));
 }
 
 // каждый id карты должен существовать в базе терминов

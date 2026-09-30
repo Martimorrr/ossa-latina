@@ -721,7 +721,7 @@ async function dropRec(t) {
    выбранной кости подгружается отдельным файлом и встаёт на то же место:
    координаты у скелета и у костей общие, мировые. */
 const THREE_URL = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-let threeReady = null, skel = null, boneFiles = null, AT = null;
+let threeReady = null, skel = null, boneFiles = null, boneLabels = null, AT = null;
 const detailCache = {};
 
 const isDark = () => document.documentElement.dataset.theme === "dark" ||
@@ -743,8 +743,12 @@ function loadSkeleton() {
   return Promise.all([
     fetch(SKEL_META).then(r => r.json()),
     fetch(SKEL_BIN).then(r => r.arrayBuffer()),
-    fetch(BONE_DIR + "index.json").then(r => r.json()).catch(() => ({}))
-  ]).then(([meta, buf, files]) => { boneFiles = files; return (skel = decodeSkel(meta, buf)); });
+    fetch(BONE_DIR + "index.json").then(r => r.json()).catch(() => ({})),
+    fetch(BONE_DIR + "labels.json").then(r => r.json()).catch(() => ({}))
+  ]).then(([meta, buf, files, labels]) => {
+    boneFiles = files; boneLabels = labels;
+    return (skel = decodeSkel(meta, buf));
+  });
 }
 
 /* Позиции лежат Int16-квантованными по общему габариту, индексы — локальные
@@ -781,13 +785,31 @@ function decodeSkel(meta, buf) {
   return { meta, pos, idx, nor, part, tri, sel: new Float32Array(nv) };
 }
 
-/* Подробная модель кости: тот же мировой масштаб, плюс точки структур */
+/* Подробная модель кости: тот же мировой масштаб, плюс точки структур.
+   Блок «OSSB» — заголовок, затем позиции Int16, квантованные по габариту
+   самой кости (потому точность выше, чем в общем буфере), и локальные
+   индексы Uint16. Те же данные в JSON весили вчетверо больше, поэтому
+   здесь лежит геометрия исходника целиком, без прореживания. */
 function loadDetail(mesh) {
   if (detailCache[mesh]) return Promise.resolve(detailCache[mesh]);
   const f = boneFiles && boneFiles[mesh];
   if (!f) return Promise.resolve(null);
-  return fetch(BONE_DIR + f).then(r => r.json())
-    .then(d => (detailCache[mesh] = d)).catch(() => null);
+  return fetch(BONE_DIR + "d/" + f).then(r => r.arrayBuffer()).then(buf => {
+    const dv = new DataView(buf);
+    const nv = dv.getUint32(4, true), nt = dv.getUint32(8, true);
+    const lx = dv.getFloat32(12, true), ly = dv.getFloat32(16, true), lz = dv.getFloat32(20, true);
+    const k = dv.getFloat32(24, true) / 65535;
+    const qp = new Uint16Array(buf, 28, nv * 3);
+    const positions = new Float32Array(nv * 3);
+    for (let i = 0; i < nv; i++) {
+      positions[i * 3]     = lx + qp[i * 3] * k;
+      positions[i * 3 + 1] = ly + qp[i * 3 + 1] * k;
+      positions[i * 3 + 2] = lz + qp[i * 3 + 2] * k;
+    }
+    const d = { positions, indices: new Uint16Array(buf, 28 + nv * 6, nt * 3),
+                labels: (boneLabels && boneLabels[mesh]) || [] };
+    return (detailCache[mesh] = d);
+  }).catch(() => null);
 }
 
 const VERT = `

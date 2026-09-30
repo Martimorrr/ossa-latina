@@ -16,6 +16,31 @@ const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6,
 
 /* Английское имя меша -> [латынь, русский] */
 const BONE_NAMES = {
+  // зубы и хрящи: в модели они есть, в остеологический словарь не входят
+  "Upper medial incisor":   ["dens incisivus medialis superior", "верхний медиальный резец"],
+  "Upper lateral incisor":  ["dens incisivus lateralis superior", "верхний латеральный резец"],
+  "Upper canine":           ["dens caninus superior", "верхний клык"],
+  "Upper first premolar":   ["dens premolaris primus superior", "верхний первый премоляр"],
+  "Upper second premolar":  ["dens premolaris secundus superior", "верхний второй премоляр"],
+  "Upper first molar tooth":["dens molaris primus superior", "верхний первый моляр"],
+  "Upper second molar tooth":["dens molaris secundus superior", "верхний второй моляр"],
+  "Lower medial incisor":   ["dens incisivus medialis inferior", "нижний медиальный резец"],
+  "Lower lateral incisor":  ["dens incisivus lateralis inferior", "нижний латеральный резец"],
+  "Lower canine":           ["dens caninus inferior", "нижний клык"],
+  "Lower first premolar":   ["dens premolaris primus inferior", "нижний первый премоляр"],
+  "Lower second premolar":  ["dens premolaris secundus inferior", "нижний второй премоляр"],
+  "Lower first molar tooth":["dens molaris primus inferior", "нижний первый моляр"],
+  "Lower second molar tooth":["dens molaris secundus inferior", "нижний второй моляр"],
+  "Thyroid cartilage":      ["cartilago thyroidea", "щитовидный хрящ"],
+  "Cricoid cartilage":      ["cartilago cricoidea", "перстневидный хрящ"],
+  "Arytenoid cartilage":    ["cartilago arytenoidea", "черпаловидный хрящ"],
+  "Corniculate cartilage":  ["cartilago corniculata", "рожковидный хрящ"],
+  "Nasal septal cartilage": ["cartilago septi nasi", "хрящ перегородки носа"],
+  "Lateral process of nasal septal cartilage": ["processus lateralis cartilaginis septi nasi", "латеральный отросток хряща перегородки носа"],
+  "Major alar cartilage":   ["cartilago alaris major", "большой хрящ крыла носа"],
+  "Anterior cells of ethmoid bone":  ["cellulae ethmoidales anteriores", "передние решётчатые ячейки"],
+  "Middle cells of ethmoid bone":    ["cellulae ethmoidales mediae", "средние решётчатые ячейки"],
+  "Posterior cells of ethmoid bone": ["cellulae ethmoidales posteriores", "задние решётчатые ячейки"],
   "Frontal bone":   ["os frontale", "лобная кость"],
   "Parietal bone":  ["os parietale", "теменная кость"],
   "Occipital bone": ["os occipitale", "затылочная кость"],
@@ -80,6 +105,9 @@ const BONE_NAMES = {
   for (const w in ORD) {
     const i = ORD[w], W = w[0].toUpperCase() + w.slice(1);
     BONE_NAMES[W + " rib"] = ["costa " + ROMAN[i], ROMAN[i] + " ребро"];
+    // у колеблющихся XI и XII рёбер хряща в модели нет
+    if (i <= 10) BONE_NAMES["Costal cartilage of " + w + " rib"] =
+      ["cartilago costalis " + ROMAN[i], "хрящ " + ROMAN[i] + " ребра"];
     if (i <= 5) {
       BONE_NAMES[W + " metacarpal bone"] = ["os metacarpi " + ROMAN[i], ROMAN[i] + " пястная кость"];
       BONE_NAMES[W + " metatarsal bone"] = ["os metatarsi " + ROMAN[i], ROMAN[i] + " плюсневая кость"];
