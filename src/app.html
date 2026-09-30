@@ -817,7 +817,7 @@ void main(){
   float a = vSel > 2.5 ? 0.0 : (vSel > 1.5 ? 1.0 : 1.0 - uFocus);
   if (a < 0.02) discard;
   vec3 base = vSel > 1.5 ? uPick : (vSel > 0.5 ? uHover : uBone);
-  vec3 n = normalize(vN);
+  vec3 n = normalize(vN) * (gl_FrontFacing ? 1.0 : -1.0);
   float d = max(dot(n, normalize(vec3(0.30, 0.55, 0.78))), 0.0);
   float f = max(dot(n, normalize(vec3(-0.55, -0.25, -0.5))), 0.0);
   float rim = pow(1.0 - max(dot(n, vec3(0.0, 0.0, 1.0)), 0.0), 2.5);
@@ -835,7 +835,7 @@ const DFRAG = `
 uniform vec3 uPick;
 varying vec3 vN;
 void main(){
-  vec3 n = normalize(vN);
+  vec3 n = normalize(vN) * (gl_FrontFacing ? 1.0 : -1.0);
   float d = max(dot(n, normalize(vec3(0.30, 0.55, 0.78))), 0.0);
   float f = max(dot(n, normalize(vec3(-0.55, -0.25, -0.5))), 0.0);
   float rim = pow(1.0 - max(dot(n, vec3(0.0, 0.0, 1.0)), 0.0), 2.5);
@@ -876,6 +876,7 @@ function buildAtlas(host) {
 
   const mat = new THREE.ShaderMaterial({
     vertexShader: VERT, fragmentShader: FRAG, transparent: true,
+    side: THREE.DoubleSide,
     uniforms: {
       uBone:  { value: new THREE.Color(dark ? 0xa79a7e : 0xe0d4ba) },
       uHover: { value: new THREE.Color(dark ? 0xd8c9a6 : 0xfaf0d8) },
@@ -886,7 +887,7 @@ function buildAtlas(host) {
   const mesh = new THREE.Mesh(geo, mat);
   scene.add(mesh);
   const dmat = new THREE.ShaderMaterial({
-    vertexShader: DVERT, fragmentShader: DFRAG,
+    vertexShader: DVERT, fragmentShader: DFRAG, side: THREE.DoubleSide,
     uniforms: { uPick: { value: new THREE.Color(dark ? 0xb8a982 : 0xddcfab) } }
   });
 
@@ -1104,7 +1105,14 @@ function buildAtlas(host) {
     pinch = d;
   }, { passive: true });
   el.addEventListener("touchend", () => { pinch = null; });
-  function zoom(f) { cam.R = cam.r = Math.max(.03, Math.min(homeR * 1.6, cam.r * f)); }
+  // ближе, чем на радиус самой кости, подходить незачем: камера окажется
+  // внутри. Разглядывать структуру нужно через её выбор в списке — там
+  // камера целится в саму точку и подходит к ней вплотную.
+  const minR = () => {
+    const b = A.picked && A.picked.length ? boxOf(A.picked) : box;
+    return Math.max(.012, b.getSize(new THREE.Vector3()).length() * .34);
+  };
+  function zoom(f) { cam.R = cam.r = Math.max(minR(), Math.min(homeR * 1.6, cam.r * f)); }
 
   let alive = true, t0 = performance.now();
   (function loop() {
@@ -1117,6 +1125,10 @@ function buildAtlas(host) {
     cam.tgt.lerp(cam.Tgt, e);
     mat.uniforms.uFocus.value += (A.focusTo - mat.uniforms.uFocus.value) * .09;
     place();
+    const near = Math.max(.0015, cam.r * .05);
+    if (Math.abs(camera.near - near) > near * .1) {
+      camera.near = near; camera.updateProjectionMatrix();
+    }
     if (halo.visible) halo.scale.setScalar(dot.scale.x * (1.75 + Math.sin((performance.now() - t0) / 380) * .3));
     renderer.render(scene, camera);
   })();
